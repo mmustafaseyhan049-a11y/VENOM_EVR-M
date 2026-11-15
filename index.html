@@ -43,8 +43,13 @@
 <section id="venomAuthGate" aria-label="Venom hesap girişi">
  <div class="va-card">
   <div class="va-brand">VENOM <b>EVRİM</b></div>
-  <div class="va-sub">Hesabına giriş yap veya Gmail adresinle kayıt ol.<br/>E-posta doğrulanmadan oyun açılmaz.</div>
-  <div id="vaSetup" class="va-pane" hidden><div class="va-step">🔧 Hesap sistemi henüz bağlanmadı</div><p class="va-small">Gerçek doğrulama e-postaları ve şifre denetimi için site sahibinin Supabase bağlantısını kurması gerekiyor. Alttaki kurulum yönergelerine bak.</p></div>
+  <div class="va-sub">Gmail hesabınla giriş yap veya kayıt ol.<br/>Gerçek hesap hizmeti kurulana kadar misafir olarak oynayabilirsin.</div>
+  <div id="vaSetup" class="va-pane" hidden>
+   <div class="va-step">🎮 Oyun hazır — hesap bağlantısı bekleniyor</div>
+   <p class="va-small">Gmail ile kayıt ve şifre kontrolü için Supabase bağlantısı gerekiyor. Bu yapılana kadar <b>Misafir Oyna</b> ile oyuna girebilirsin. Misafir ilerlemen yalnızca bu tarayıcıda saklanır.</p>
+   <button type="button" class="va-action" id="vaGuestPlay">🎮 MİSAFİR OLARAK OYNA</button>
+   <p class="va-small">Misafir modu gerçek kayıt veya doğrulanmış hesap değildir. Bağlantı kurulduğunda Gmail ile hesap açılabilir.</p>
+  </div>
   <div id="vaForms">
    <div class="va-tabs"><button type="button" id="vaTabLogin" class="active">GİRİŞ YAP</button><button type="button" id="vaTabRegister">KAYIT OL</button></div>
    <form id="vaLoginForm" class="va-pane">
@@ -262,7 +267,13 @@ const KEY='symbiote_aura_tycoon_v4';let previous={};try{previous=JSON.parse(loca
 let state={cash:Number(previous.cash)||0,level:Math.max(1,Number(previous.level)||1),xp:Number(previous.xp)||0,skin:Number.isInteger(previous.skin)?previous.skin:0,aura:Number.isInteger(previous.aura)?previous.aura:0,ownedSkins:Array.isArray(previous.ownedSkins)?previous.ownedSkins:[0],ownedAuras:Array.isArray(previous.ownedAuras)?previous.ownedAuras:[0]};
 state.ownedSkins=Array.from(new Set([0,...state.ownedSkins.filter(i=>Number.isInteger(i)&&i>=0&&i<50)]));state.ownedAuras=Array.from(new Set([0,...state.ownedAuras.filter(i=>Number.isInteger(i)&&i>=0&&i<24)]));if(!state.ownedSkins.includes(state.skin))state.skin=0;if(!state.ownedAuras.includes(state.aura))state.aura=0;
 const $=id=>document.getElementById(id);let tab='skin';const fmt=n=>Number(n).toLocaleString('tr-TR',{maximumFractionDigits:0,notation:Number(n)>=1e18?'scientific':'standard'});const needXP=level=>Math.floor(24*Math.pow(level,1.53));const income=()=>Math.max(5,Math.floor((5+Math.pow(state.level,1.23)*.65)*(1+SKINS[state.skin].bonus/100)));const reward=l=>Math.floor(22*l*Math.pow(l,0.75));
-function save(){if(!window.VENOM_AUTHORIZED || !window.VENOM_USER_ID)return;try{localStorage.setItem('venom_user_'+window.VENOM_USER_ID,JSON.stringify(state))}catch(e){}}
+function save(){
+ if(!window.VENOM_AUTHORIZED)return;
+ try{
+  const key=window.VENOM_GUEST_MODE?KEY:('venom_user_'+window.VENOM_USER_ID);
+  if(key)localStorage.setItem(key,JSON.stringify(state));
+ }catch(e){}
+}
 function display(){const rate=income();$('cashTop').textContent=fmt(state.cash);$('cash').textContent=fmt(state.cash)+' 🪙';$('levelTop').textContent=state.level;$('level').textContent=state.level;$('income').textContent='+'+fmt(rate)+' 🪙/sn';$('incomeTop').textContent=fmt(rate);$('xpText').textContent=fmt(state.xp)+' / '+fmt(needXP(state.level))+' XP';$('xpBar').style.width=Math.min(100,state.xp/needXP(state.level)*100)+'%';$('avatarName').textContent=SKINS[state.skin].name.toLocaleUpperCase('tr-TR');const appearance=skinArt(state.skin);$('skinBack').innerHTML=appearance.back;$('skinFront').innerHTML=appearance.front;$('skinSummary').innerHTML='<b>'+SKINS[state.skin].name+'</b><p>Para bonusu: +%'+SKINS[state.skin].bonus+'</p>';$('auraSummary').innerHTML='<b>'+AURAS[state.aura].name+'</b><p>Sadece görsel efekt • Kazanç bonusu yok</p>';document.documentElement.style.setProperty('--skin',SKINS[state.skin].body);document.documentElement.style.setProperty('--shine',SKINS[state.skin].shine);document.documentElement.style.setProperty('--aura',AURAS[state.aura].color);$('auraZone').className='aura-zone '+(state.aura===0?'aura-off no-aura':'aura-on');}
 function floatMoney(amount){const e=document.createElement('span');e.className='float-money';e.textContent='+'+fmt(amount)+' 🪙';e.style.left=(43+Math.random()*14)+'%';$('stage').appendChild(e);setTimeout(()=>e.remove(),1000)}
 // Para, XP ve seviye hesaplaması görsel animasyondan bağımsızdır.
@@ -517,6 +528,7 @@ function showForm(id){formNames.forEach(n=>{el(n).hidden=n!==id});el('vaTabLogin
 function busy(form,val){const b=form.querySelector('button[type="submit"]');if(b)b.disabled=val}
 function fail(err){msg(err?.message||String(err)||'Bir hata oluştu. Tekrar deneyin.')}
 function freshProfile(user){
+ window.VENOM_GUEST_MODE=false;
  window.VENOM_USER_ID=user.id;
  const key='venom_user_'+user.id;
  let v={};try{v=JSON.parse(localStorage.getItem(key)||'{}')||{}}catch(e){}
@@ -535,7 +547,7 @@ function freshProfile(user){
  display();
 }
 function lockGame(){
- window.VENOM_AUTHORIZED=false;window.VENOM_USER_ID=null;
+ window.VENOM_AUTHORIZED=false;window.VENOM_GUEST_MODE=false;window.VENOM_USER_ID=null;
  el('vaAccountBar').style.display='none';el('venomAuthGate').hidden=false;
  showForm('vaLoginForm');
 }
@@ -545,7 +557,19 @@ el('vaBackRegister').onclick=()=>showForm('vaRegisterForm');
 const configured=VENOM_SUPABASE_URL.startsWith('https://')&&VENOM_SUPABASE_PUBLISHABLE_KEY.length>30;
 if(!configured || !window.supabase?.createClient){
  el('vaSetup').hidden=false;el('vaForms').hidden=true;
- if(configured)el('vaSetup').querySelector('p').textContent='Supabase kütüphanesi yüklenemedi. İnternet bağlantısını kontrol et.';
+ if(configured)el('vaSetup').querySelector('p').textContent='Bağlantı hizmeti yüklenemedi. İnternetini kontrol et; o sırada misafir olarak oynayabilirsin.';
+ el('vaGuestPlay').addEventListener('click',()=>{
+  window.VENOM_GUEST_MODE=true;
+  window.VENOM_USER_ID='guest';
+  window.VENOM_AUTHORIZED=true;
+  el('venomAuthGate').hidden=true;
+  el('vaAccountBar').style.display='flex';
+  el('vaAccountEmail').textContent='🎮 Misafir modu';
+  display();
+ });
+ el('vaLogout').addEventListener('click',()=>{
+  save();lockGame();
+ });
  return;
 }
 db=window.supabase.createClient(VENOM_SUPABASE_URL,VENOM_SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
