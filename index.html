@@ -22,7 +22,7 @@
 /* VENOM ACCOUNT GATE */
 #venomAuthGate{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;padding:22px;background:radial-gradient(ellipse at 52% 17%,#28205d 0,#080b17 72%);overflow:auto}
 #venomAuthGate[hidden]{display:none!important}
-.va-card{width:min(100%,460px);background:#121b31;border:1px solid #5264a1;border-radius:23px;box-shadow:0 25px 80px #0009;padding:26px;color:#f1f6ff}
+.va-card{max-height:calc(100vh - 32px);overflow-y:auto;width:min(100%,460px);background:#121b31;border:1px solid #5264a1;border-radius:23px;box-shadow:0 25px 80px #0009;padding:26px;color:#f1f6ff}
 .va-brand{text-align:center;font-size:26px;font-weight:1000;letter-spacing:2px;margin-bottom:8px}.va-brand b{color:#a698ff}
 .va-sub{text-align:center;color:#bbc6e5;font-size:13px;line-height:1.6;margin-bottom:22px}
 .va-tabs{display:flex;gap:8px;margin-bottom:18px}.va-tabs button{flex:1;background:#1c2a47;border:1px solid #52618a;color:#cbd5f0;border-radius:11px;padding:11px;font-weight:800}
@@ -43,7 +43,7 @@
 <section id="venomAuthGate" aria-label="Venom hesap girişi">
  <div class="va-card">
   <div class="va-brand">VENOM <b>EVRİM</b></div>
-  <div class="va-sub">Gmail hesabınla giriş yap veya kayıt ol.<br/>Gerçek hesap hizmeti kurulana kadar misafir olarak oynayabilirsin.</div>
+  <div class="va-sub">Kayıt ol veya hesabınla giriş yap.<br/>Hesabınla Venom Tycoon oyna.</div>
   <div id="vaSetup" class="va-pane" hidden>
    <div class="va-step">🎮 Oyun hazır — hesap bağlantısı bekleniyor</div>
    <p class="va-small">Gmail ile kayıt ve şifre kontrolü için Supabase bağlantısı gerekiyor. Bu yapılana kadar <b>Misafir Oyna</b> ile oyuna girebilirsin. Misafir ilerlemen yalnızca bu tarayıcıda saklanır.</p>
@@ -76,7 +76,7 @@
     <button class="va-action" type="submit">KAYDI TAMAMLA</button>
    </form>
    <p id="vaMsg" class="va-msg" role="status" aria-live="polite"></p>
-   <p class="va-small">Bu, Google ile OAuth girişi değil; doğrulanmış Gmail adresi ve şifreyle çalışan hesap sistemidir. Doğrulama kodunu kimseyle paylaşma.</p>
+   <p class="va-small">Supabase bağlanırsa e-posta doğrulaması kullanılır. Yerel modda Gmail doğrulaması yapılmaz. Google OAuth girişi değildir.</p>
   </div>
  </div>
 </section>
@@ -556,20 +556,63 @@ el('vaTabRegister').onclick=()=>showForm('vaRegisterForm');
 el('vaBackRegister').onclick=()=>showForm('vaRegisterForm');
 const configured=VENOM_SUPABASE_URL.startsWith('https://')&&VENOM_SUPABASE_PUBLISHABLE_KEY.length>30;
 if(!configured || !window.supabase?.createClient){
- el('vaSetup').hidden=false;el('vaForms').hidden=true;
- if(configured)el('vaSetup').querySelector('p').textContent='Bağlantı hizmeti yüklenemedi. İnternetini kontrol et; o sırada misafir olarak oynayabilirsin.';
- el('vaGuestPlay').addEventListener('click',()=>{
-  window.VENOM_GUEST_MODE=true;
-  window.VENOM_USER_ID='guest';
-  window.VENOM_AUTHORIZED=true;
-  el('venomAuthGate').hidden=true;
-  el('vaAccountBar').style.display='flex';
-  el('vaAccountEmail').textContent='🎮 Misafir modu';
-  display();
+ // Yerel hesap modu: işlevsel kayıt/giriş, ancak e-posta göndermez ve
+ // kimlik doğrulamaz. Gerçek çevrimiçi hesap için Supabase gereklidir.
+ el('vaSetup').hidden=true;
+ el('vaForms').hidden=false;
+ const note=document.createElement('div');
+ note.className='va-step';
+ note.style.cssText='margin:0 0 15px;border-color:#927146;color:#ffe1a0';
+ note.textContent='YEREL HESAP MODU: Kayıt ve şifre bu tarayıcıda çalışır. Gmail doğrulama e-postası gönderilmez; başka cihazda bu hesap bulunmaz.';
+ el('vaForms').insertBefore(note,el('vaForms').firstChild);
+ const f=el('vaRegisterForm');
+ const passBlock=document.createElement('div');
+ passBlock.innerHTML='<label for="vaLocalPass">Şifre belirle (en az 8 karakter)</label><input id="vaLocalPass" type="password" autocomplete="new-password" minlength="8" required placeholder="Yeni şifren"><label for="vaLocalPass2">Şifreyi tekrar yaz</label><input id="vaLocalPass2" type="password" autocomplete="new-password" minlength="8" required placeholder="Şifreni doğrula">';
+ f.querySelector('button[type="submit"]').before(passBlock);
+ f.querySelector('.va-step').textContent='Bu cihazda yeni hesap oluştur';
+ f.querySelector('button[type="submit"]').textContent='KAYIT OL';
+ el('vaLoginForm').querySelector('button[type="submit"]').textContent='GİRİŞ YAP';
+ const keyFor=email=>'venom_local_login_'+email.toLowerCase();
+ const textBytes=s=>new TextEncoder().encode(s);
+ const toHex=b=>Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');
+ async function derive(pass,salt){
+  if(!crypto?.subtle)throw new Error('Bu tarayıcı güvenli şifre saklamayı desteklemiyor. HTTPS ile açmayı dene.');
+  const k=await crypto.subtle.importKey('raw',textBytes(pass),'PBKDF2',false,['deriveBits']);
+  return toHex(await crypto.subtle.deriveBits({name:'PBKDF2',salt:textBytes(salt),iterations:150000,hash:'SHA-256'},k,256));
+ }
+ f.addEventListener('submit',async event=>{
+  event.preventDefault();
+  const email=el('vaRegisterEmail').value.trim().toLowerCase();
+  const pass=el('vaLocalPass').value;
+  if(!gmail(email)){msg('Geçerli bir Gmail adresi yaz.');return}
+  if(pass.length<8){msg('Şifre en az 8 karakter olmalı.');return}
+  if(pass!==el('vaLocalPass2').value){msg('Şifreler eşleşmiyor.');return}
+  busy(f,true);
+  try{
+   if(localStorage.getItem(keyFor(email))){msg('Bu e-posta bu tarayıcıda kayıtlı. Giriş Yap bölümünü kullan.');return}
+   const salt=toHex(crypto.getRandomValues(new Uint8Array(16)));
+   const hash=await derive(pass,salt);
+   localStorage.setItem(keyFor(email),JSON.stringify({salt,hash,id:'local-'+toHex(await crypto.subtle.digest('SHA-256',textBytes(email))).slice(0,24)}));
+   el('vaLoginEmail').value=email;el('vaLoginPass').value='';
+   f.reset();showForm('vaLoginForm');msg('Kayıt oluşturuldu! Şimdi e-posta ve şifrenle giriş yap. E-posta doğrulanmadı.');
+  }catch(err){fail(err)}finally{busy(f,false)}
  });
- el('vaLogout').addEventListener('click',()=>{
-  save();lockGame();
+ el('vaLoginForm').addEventListener('submit',async event=>{
+  event.preventDefault();const form=event.currentTarget;
+  const email=el('vaLoginEmail').value.trim().toLowerCase();
+  if(!gmail(email)){msg('Geçerli bir Gmail adresi gir.');return}
+  busy(form,true);
+  try{
+   let saved;try{saved=JSON.parse(localStorage.getItem(keyFor(email))||'null')}catch(_){}
+   if(!saved){msg('E-posta veya şifre yanlış.');return}
+   const given=await derive(el('vaLoginPass').value,saved.salt);
+   if(given!==saved.hash){msg('E-posta veya şifre yanlış.');return}
+   window.VENOM_GUEST_MODE=false;
+   freshProfile({id:saved.id,email});
+   el('vaLoginPass').value='';
+  }catch(err){fail(err)}finally{busy(form,false)}
  });
+ el('vaLogout').addEventListener('click',()=>{save();lockGame()});
  return;
 }
 db=window.supabase.createClient(VENOM_SUPABASE_URL,VENOM_SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
