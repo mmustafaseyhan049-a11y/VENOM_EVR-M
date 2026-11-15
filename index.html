@@ -40,6 +40,25 @@
 .va-step{padding:8px 10px;margin:10px 0;border:1px solid #46587c;background:#1d2b48;border-radius:10px;color:#b7eeec;font-size:12px}
 #vaAccountBar{display:none;position:fixed;right:15px;bottom:12px;z-index:900;border:1px solid #48557c;background:#111c30f2;border-radius:13px;padding:8px 12px;gap:10px;align-items:center;font-size:12px;color:#d7e7fc}
 #vaAccountBar button{background:#42388e;border:0;border-radius:9px;color:white;padding:8px;cursor:pointer;font-weight:800}
+
+
+/* Venom Evrim expansion collection */
+.ex-toolbar{display:flex;flex-wrap:wrap;gap:8px;padding:12px max(12px,calc((100vw - 1260px)/2));background:#0b1225;border-bottom:1px solid #33496b}
+.ex-toolbar button{border-radius:10px;padding:10px 13px;border:1px solid #6c58a9;background:#24254d;color:#fff;font-weight:800;font-size:13px}
+.ex-toolbar button:hover{background:#493f85}
+.ex-toolbar .ex-secret{background:#571b36;border-color:#e34778}
+#exModal{position:fixed;inset:0;z-index:180;background:#02040ce6;display:none;align-items:center;justify-content:center;padding:12px}
+#exModal.ex-open{display:flex}
+.ex-window{width:min(950px,100%);max-height:93vh;overflow:auto;border:1px solid #716bb1;background:linear-gradient(145deg,#17233a,#101528);border-radius:20px;box-shadow:0 14px 65px #000b;padding:22px;color:#eff6ff}
+.ex-head{display:flex;align-items:center;justify-content:space-between;gap:15px;position:sticky;top:-22px;background:#162037;padding:10px 0;z-index:2}
+.ex-head h2{margin:0;font-size:23px}.ex-close{font-size:19px;color:white;background:#344365;border:1px solid #7389ae;border-radius:9px;padding:7px 13px}
+.ex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:12px}.ex-card{border:1px solid #4c5c81;border-radius:15px;background:#202a45;padding:13px;min-height:165px;display:flex;flex-direction:column;gap:8px}.ex-card b{font-size:14px}.ex-card small{color:#bdcbe2;line-height:1.4}.ex-card .emblem{font-size:38px;text-align:center;filter:drop-shadow(0 0 12px #8d66ff55)}
+.ex-btn{border-radius:9px;border:1px solid #8a7bce;background:#5748b6;color:white;font-weight:800;padding:10px;cursor:pointer}.ex-btn:disabled{opacity:.4;cursor:not-allowed}.ex-card .ex-btn{margin-top:auto}.ex-highlight{border:1px solid #765fba;background:#282143;border-radius:13px;padding:13px;margin:12px 0}.ex-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0}.ex-row input,.ex-row select{min-width:120px;flex:1;padding:11px;border-radius:9px;border:1px solid #6678a1;background:#0b1528;color:#fff}.ex-help{color:#becbe7;font-size:13px;line-height:1.7}.ex-status{color:#ffdb82;font-size:13px;min-height:20px;line-height:1.6}.ex-rank{display:grid;grid-template-columns:40px 1fr 110px 90px;gap:8px;padding:11px;border-bottom:1px solid #3d4a65;font-size:13px}.ex-rank:nth-child(even){background:#1b2840}.ex-rare{color:#fa8bff}.ex-legend{color:#ffcd6a}.ex-secret-text{color:#ff486c}.ex-title{font-size:17px;margin:18px 0 9px}.ex-vault{display:flex;align-items:center;gap:12px;background:#141d31;border:1px solid #4e5682;border-radius:14px;padding:13px;margin-top:10px;flex-wrap:wrap}
+.stage.ex-forsaken-world{background:radial-gradient(ellipse 70% 72% at 50% 45%,#8e0f37 0%,#31091c 42%,#07050e 92%)!important}
+.stage.ex-forsaken-world::after{content:'FORSAKEN REALM';position:absolute;top:30%;left:0;right:0;text-align:center;font-size:clamp(25px,5vw,66px);font-weight:1000;letter-spacing:5px;color:#fa1f57;opacity:.11;pointer-events:none;z-index:1;text-shadow:0 0 27px #fc2345}
+.ex-pet-float{position:absolute;bottom:130px;right:2%;z-index:4;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:36px;animation:breathe 2s infinite;pointer-events:none;filter:drop-shadow(0 0 14px #d577ff)}.ex-pet-float span{font-size:10px;color:#e5d4ff;background:#121629a8;border-radius:9px;padding:3px 7px}
+@media(max-width:650px){.ex-window{padding:13px}.ex-head{top:-13px}.ex-toolbar{padding:9px}.ex-toolbar button{font-size:11px;padding:8px}.ex-rank{grid-template-columns:25px 1fr 75px 60px;font-size:11px}}
+
 </style></head><body>
 <section id="venomAuthGate" aria-label="Venom hesap girişi">
  <div class="va-card">
@@ -84,6 +103,20 @@
 <div id="vaAccountBar"><span id="vaAccountEmail"></span><button type="button" id="vaLogout">ÇIKIŞ YAP</button></div>
 
 <header class="top"><div class="logo">VENOM <span>EVRİM</span></div><div class="topright"><div class="pill">🪙 <strong id="cashTop">0</strong></div><div class="pill">⭐ Seviye <strong id="levelTop">1</strong></div><div class="pill">⏱️ <strong id="incomeTop">0</strong> / sn</div><button class="pill top-market" id="skinTop">🎭 SKIN MARKET</button><button class="pill top-market" id="auraTop">✨ AURA MARKET</button></div></header>
+
+<nav class="ex-toolbar" aria-label="Ek oyun özellikleri">
+ <button type="button" data-ex="rebirth">♻️ Rebirth</button>
+ <button type="button" data-ex="crates">🎁 Skin Kutuları</button>
+ <button type="button" data-ex="pets">🐾 Petler</button>
+ <button type="button" data-ex="evolve">🧬 Evrim Ağacı</button>
+ <button type="button" data-ex="daily">📅 Günlük Ödül</button>
+ <button type="button" data-ex="rank">🏆 Liderlik</button>
+ <button type="button" data-ex="trade">🔄 Takas</button>
+ <button type="button" data-ex="realm">👁️ Forsaken Dünyası</button>
+ <button type="button" data-ex="secret" class="ex-secret">🔐 Secret Event</button>
+</nav>
+<div id="exModal" role="dialog" aria-modal="true" aria-labelledby="exTitle"><div class="ex-window"><div class="ex-head"><h2 id="exTitle">VENOM EVRİM</h2><button type="button" class="ex-close" id="exClose">✕ Kapat</button></div><div id="exContents"></div><p id="exStatus" class="ex-status" aria-live="polite"></p></div></div>
+
 <main class="layout"><section class="panel"><p class="smalltitle">HESABIN</p><div class="sub">Toplam paran</div><div class="bigmoney" id="cash">0 🪙</div><div class="statline"><span>SEVİYE</span><b id="level">1</b></div><div class="bar"><div id="xpBar"></div></div><p class="sub" id="xpText">0 / 20 XP</p><div class="income"><div class="smalltitle">OTOMATİK KAZANÇ</div><b id="income">+1 🪙/sn</b><div class="sub">Normal Venom bile her saniye en az +5 altın kazanır. Hiçbir şey yapmana gerek yok.</div></div><p class="tip">Her saniye XP de kazanırsın. Seviye yükseldikçe yeni seviyeye ulaşmak zorlaşır, ancak seviye atlama ödülün büyür.<br><br>Skinler para kazancını artırır. Auralar yalnızca görünüş içindir.</p></section>
 <section class="stage" id="stage"><h1>VENOM</h1><div class="caption">Sürekli sana bakan karakterin • Saldırı yok</div><div class="spot"></div><canvas id="eventCanvas" class="event-canvas" aria-hidden="true"></canvas><div class="event-banner" id="eventBanner"></div><div class="avatar-wrap"><div class="aura-zone aura-off no-aura" id="auraZone"><div class="aura-ring"></div><canvas class="aura-sparks" id="auraCanvas"></canvas></div>
 <svg id="mainAvatar" class="avatar" viewBox="0 0 440 590" role="img" aria-label="Önden görünen, iki kolu, elleri, iki bacağı ve ayakları olan Venom karakteri">
@@ -115,7 +148,7 @@
 <path class="tongue" d="M205 188 Q226 179 236 190 L228 199 Q217 206 210 198Z"/>
 <path class="veins" d="M162 81 Q183 67 199 72 M277 81 Q256 67 240 72"/>
 <g id="skinFront"></g></svg></div><div class="av-name" id="avatarName">KLASİK VENOM</div></section>
-<aside class="panel right"><p class="smalltitle">MARKETLER</p><button class="btn fill" id="skinBtn">🎭 50 SKIN • MARKET</button><button class="btn fill alt" id="auraBtn">✨ 23 AURA • MARKET</button><hr><p class="smalltitle">SEÇİLİ SKIN</p><div id="skinSummary"><b>Klasik Venom</b><p>Para bonusu: %0</p></div><hr><p class="smalltitle">SEÇİLİ AURA</p><div id="auraSummary"><b>Aura yok</b><p>Auralar sadece görünüş içindir.</p></div><hr><button class="btn fill alt" id="adminVisible">🔐 ADMIN PANELİ</button><span class="badge">💾 Otomatik kayıt</span><p class="hint">🔐 Admin paneli: <b>Ü</b> tuşu</p><p>Bu oyun savaş içermez. Karakter ekranda sana dönük durur; para ve XP her saniye otomatik gelir.</p></aside></main>
+<aside class="panel right"><p class="smalltitle">MARKETLER</p><button class="btn fill" id="skinBtn">🎭 50 SKIN • MARKET</button><button class="btn fill alt" id="auraBtn">✨ 24 AURA • MARKET</button><hr><p class="smalltitle">SEÇİLİ SKIN</p><div id="skinSummary"><b>Klasik Venom</b><p>Para bonusu: %0</p></div><hr><p class="smalltitle">SEÇİLİ AURA</p><div id="auraSummary"><b>Aura yok</b><p>Auralar sadece görünüş içindir.</p></div><hr><button class="btn fill alt" id="adminVisible">🔐 ADMIN PANELİ</button><span class="badge">💾 Otomatik kayıt</span><p class="hint">🔐 Admin paneli: <b>Ü</b> tuşu</p><p>Bu oyun savaş içermez. Karakter ekranda sana dönük durur; para ve XP her saniye otomatik gelir.</p></aside></main>
 <div class="modal" id="modal" aria-hidden="true"><div class="window" role="dialog" aria-modal="true" aria-labelledby="shopTitle"><div class="window-head"><h2 id="shopTitle">MARKET</h2><button class="close" id="close">✕ Kapat</button></div><div class="shop-switch"><button class="btn" id="tabSkins">🎭 Skinler (50)</button><button class="btn alt" id="tabAuras">✨ Auralar (23)</button></div><p class="hint" id="shopInfo"></p><div class="shop-grid" id="shopGrid"></div></div></div>
 <div class="modal" id="adminModal" aria-hidden="true"><div class="window admin-window" role="dialog" aria-modal="true" aria-labelledby="adminTitle"><div class="window-head"><h2 id="adminTitle">🔐 ADMIN PANELİ</h2><button class="close" id="adminClose">✕ Kapat</button></div><div id="adminLogin"><p class="hint">Admin panelini açmak için şifreyi gir.</p><label for="adminPassword">Şifre</label><input id="adminPassword" type="password" autocomplete="off" placeholder="Admin şifresi"/><button id="adminEnter" class="btn fill">GİRİŞ YAP</button></div><div id="adminControls" hidden><label for="adminMoney">Hesabına eklenecek para miktarı</label><input id="adminMoney" type="text" inputmode="decimal" placeholder="Örnek: 1000000000"/><div class="quick-row"><button type="button" data-quick="1000">+1.000</button><button type="button" data-quick="1000000">+1 MİLYON</button><button type="button" data-quick="1000000000">+1 MİLYAR</button><button type="button" data-quick="1000000000000">+1 TRİLYON</button></div><button id="adminAdd" class="btn fill">🪙 PARAYI EKLE</button><p class="hint">Mevcut paran: <b id="adminBalance">0</b> 🪙</p><div class="admin-section"><h3>🎉 EVENT KONTROLÜ</h3><p class="hint">Etkinlikler sınırlı süreli özel bonuslar sağlar. Sağ alttan kalan süreyi görebilirsin. Gönderdiğin MP3 dosyaları HTML içine gömülüdür ve event süresince otomatik döngüde çalar.</p><label for="eventDuration">Event süresi (dakika)</label><input id="eventDuration" class="event-duration" type="number" min="1" max="120" value="5" />
 <div style="padding:12px;margin:12px 0;border:1px solid #78abfb;border-radius:12px;background:#112345"><b>🌐 HERKESE AÇIK CANLI EVENT</b><p style="font-size:12px;color:#b9d7fb">Eventi tüm oyunculara göndermek için Render Web Service adresini aşağıya yaz. Adres yoksa event başlatılamaz; yalnızca bu tarayıcıda çalışıyormuş gibi gösterilmez.</p><input id="globalEventApi" type="url" placeholder="https://venom-event-api.onrender.com" style="width:100%"/><button type="button" id="saveGlobalEventApi" class="btn fill" style="margin:8px 0">🌐 BAĞLANTIYI KAYDET / TEST ET</button><div id="globalEventStatus" role="status" style="font-size:12px;color:#f6d08a">Sunucu bağlantısı kontrol ediliyor...</div></div><div class="admin-grid" id="eventGrid"></div>
@@ -269,7 +302,7 @@ const AURAS=AURA_NAMES.map((name,i)=>({name,color:AURA_COLORS[i],price:i===0?0:(
 const KEY='symbiote_aura_tycoon_v5';let previous={};try{previous=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(_){}
 let state={cash:Number(previous.cash)||0,level:Math.max(1,Number(previous.level)||1),xp:Number(previous.xp)||0,skin:Number.isInteger(previous.skin)?previous.skin:0,aura:Number.isInteger(previous.aura)?previous.aura:0,ownedSkins:Array.isArray(previous.ownedSkins)?previous.ownedSkins:[0],ownedAuras:Array.isArray(previous.ownedAuras)?previous.ownedAuras:[0]};
 state.ownedSkins=Array.from(new Set([0,...state.ownedSkins.filter(i=>Number.isInteger(i)&&i>=0&&i<50)]));state.ownedAuras=Array.from(new Set([0,...state.ownedAuras.filter(i=>Number.isInteger(i)&&i>=0&&i<25)]));if(!state.ownedSkins.includes(state.skin))state.skin=0;if(!state.ownedAuras.includes(state.aura))state.aura=0;
-const $=id=>document.getElementById(id);let tab='skin';const NUM_SUFFIXES=[{v:1e33,s:'De'},{v:1e30,s:'No'},{v:1e27,s:'Oc'},{v:1e24,s:'Sp'},{v:1e21,s:'Sx'},{v:1e18,s:'Qi'},{v:1e15,s:'Qa'},{v:1e12,s:'T'},{v:1e9,s:'B'},{v:1e6,s:'M'},{v:1e3,s:'K'}];const fmt=n=>{n=Number(n)||0;const abs=Math.abs(n);for(const u of NUM_SUFFIXES){if(abs>=u.v){const raw=n/u.v;const digits=Math.abs(raw)>=100?0:(Math.abs(raw)>=10?1:2);return raw.toFixed(digits).replace(/\.0+$|(?<=\..*?)0+$/,'')+u.s}}return Number(n).toLocaleString('tr-TR',{maximumFractionDigits:0});};const needXP=level=>Math.floor(24*Math.pow(level,1.53));const income=()=>Math.max(5,Math.floor((5+Math.pow(state.level,1.23)*.65)*(1+SKINS[state.skin].bonus/100)));const reward=l=>Math.floor(22*l*Math.pow(l,0.75));
+const $=id=>document.getElementById(id);let tab='skin';const NUM_SUFFIXES=[{v:1e33,s:'De'},{v:1e30,s:'No'},{v:1e27,s:'Oc'},{v:1e24,s:'Sp'},{v:1e21,s:'Sx'},{v:1e18,s:'Qi'},{v:1e15,s:'Qa'},{v:1e12,s:'T'},{v:1e9,s:'B'},{v:1e6,s:'M'},{v:1e3,s:'K'}];const fmt=n=>{n=Number(n)||0;const abs=Math.abs(n);for(const u of NUM_SUFFIXES){if(abs>=u.v){const raw=n/u.v;const digits=Math.abs(raw)>=100?0:(Math.abs(raw)>=10?1:2);return raw.toFixed(digits).replace(/\.?0+$/,'')+u.s}}return Number(n).toLocaleString('tr-TR',{maximumFractionDigits:0});};const needXP=level=>Math.floor(24*Math.pow(level,1.53));const income=()=>Math.max(5,Math.floor((5+Math.pow(state.level,1.23)*.65)*(1+SKINS[state.skin].bonus/100)));const reward=l=>Math.floor(22*l*Math.pow(l,0.75));
 function save(){
  if(!window.VENOM_AUTHORIZED)return;
  try{
@@ -437,7 +470,7 @@ function globalMessage(msg,ok=false){
 }
 function applyGlobalEvent(ev){
  if(!ev || !Number.isInteger(Number(ev.num)))return;
- const num=Math.max(0,Math.min(4,Number(ev.num)));
+ const num=Math.max(0,Math.min(5,Number(ev.num)));
  const start=Number(ev.startedAt)||0, end=Number(ev.endsAt)||0;
  const revision=Number(ev.revision)||0;
  if(revision<globalRevision)return;
@@ -766,6 +799,86 @@ el('vaLogout').addEventListener('click',async()=>{
  save();try{await db.auth.signOut()}catch(e){};
  lockGame();
 });
+})();
+</script>
+<script>
+(()=>{'use strict';
+// Feature expansion. Saved independently to preserve the player's existing coins, skins, auras, and event music.
+const XKEY='venom_extra_features_v3';
+let x;
+try{x=JSON.parse(localStorage.getItem(XKEY)||'{}')}catch{x={}}
+x=Object.assign({rebirth:0,evo:[0,0,0,0],pets:[],pet:0,lastDaily:'',realm:false,boxCount:0,playerName:'',playerToken:'',playerId:'',trades:[],sentTrades:[]},x||{});
+const petNames=['Gece Küresi','Şimşek Topu','Mavi Hayalet','Alev Yavrusu','Zehir Damlası','Kutup Tilkisi','Mini Simbiyot','Kristal Yarasa','Gökkuşağı Perisi','Zümrüt Baykuş','Kozmik Kurbağa','Kızıl Kedi','Ay Kelebeği','Buz Ejderi','Güneş Küresi','Neon Ruh','Obsidyen Kurt','Plazma Tavşan','Altın Akrep','Siber Panda','Yıldız Tilkisi','Mor Alev','Kayıp Piksel','Gölge Yılan','Kara Elmas','Galaksi Miniği','Sonsuz Tohum','Kuantum Balina','Forsaken Ruh','1X Muhafızı'];
+const petEmojis=['🌑','⚡','👻','🔥','☣️','🦊','🕷️','🦇','🦋','🦉','🐸','🐈','🦋','🐉','☀️','🪩','🐺','🐇','🦂','🐼','🌟','💜','👾','🐍','💎','🪐','🌱','🐳','👁️','🔱'];
+const evoNames=['Simbiyot Çekirdeği','Gölge Kol','Kristal Zırh','Evrim Enerjisi'];
+const dailyGold=[100,250,500,1250,3000,6500,15000];
+const clean=()=>{try{localStorage.setItem(XKEY,JSON.stringify(x))}catch{}};
+const money=n=>fmt(n);
+const lvlReq=()=>10+x.rebirth*10;
+const pBonus=()=>x.pet>0&&x.pets.includes(x.pet)?(1+.05*x.pet):1;
+const cashBoost=()=>1+x.rebirth*.4+x.evo[0]*.15+x.evo[1]*.2;
+const xpBoost=()=>1+x.evo[2]*.2+x.evo[3]*.35;
+const modal=document.getElementById('exModal'),content=document.getElementById('exContents'),notice=document.getElementById('exStatus'),title=document.getElementById('exTitle');
+let page='rebirth';
+function tell(s){notice.textContent=s;}
+function panel(p){page=p;modal.classList.add('ex-open');draw();}
+function close(){modal.classList.remove('ex-open');}
+document.getElementById('exClose').onclick=close;
+modal.addEventListener('click',e=>{if(e.target===modal)close()});
+document.querySelectorAll('[data-ex]').forEach(b=>b.addEventListener('click',()=>panel(b.dataset.ex)));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+function stamp(){const now=new Date();return now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0')}
+function refStatus(){return navigator.onLine?'🌐 Global sunucu mevcutsa sıralama ve takas çevrimiçi çalışır.':'🔴 Çevrimdışı mod.'}
+const b=(act,label,disabled=false)=>`<button class="ex-btn" data-xact="${act}" ${disabled?'disabled':''}>${label}</button>`;
+function draw(){title.textContent=({rebirth:'♻️ REBIRTH',crates:'🎁 SKIN KUTULARI',pets:'🐾 30 PET',evolve:'🧬 EVRİM AĞACI',daily:'📅 GÜNLÜK ÖDÜLLER',rank:'🏆 GLOBAL LİDERLİK',trade:'🔄 PET TAKASI',realm:'👁️ FORSAKEN DÜNYASI',secret:'🔐 SECRET EVENTLER'})[page]||'VENOM';let html='';
+if(page==='rebirth'){const ok=state.level>=lvlReq();html=`<div class="ex-highlight"><b>Rebirth: ${x.rebirth}</b><p>Gerekli seviye: ${lvlReq()} • Şu an: ${state.level}</p><p>Her Rebirth +%40 kalıcı para bonusu sağlar. Yeni doğuşta paran, seviye ve XP sıfırlanır; satın alınmış skin, aura ve petler kalır.</p><p>Mevcut çarpan: ×${cashBoost().toFixed(2)}</p>${b('rebirth','♻️ YENİDEN DOĞ',!ok)}</div>`}
+if(page==='crates'){let cost=2500*Math.pow(2,Math.floor(x.boxCount/4));html=`<p class="ex-help">Kutu açınca 50 mevcut skin içinden rastgele bir skin elde edersin. Daha nadir skinler daha düşük olasılıkla çıkar. Aynı skin gelirse kutu ücretinin yarısı iade edilir. Gerçek para kullanılmaz.</p><div class="ex-highlight">Açılmış kutu: ${x.boxCount} • Sonraki kutu: ${money(cost)} 🪙 <div class="ex-row">${b('crate','🎁 KUTUYU AÇ',state.cash<cost)}</div></div><div class="ex-grid"><div class="ex-card"><b>Common</b><small>%50</small></div><div class="ex-card"><b>Rare</b><small>%30</small></div><div class="ex-card"><b class="ex-rare">Epic</b><small>%14</small></div><div class="ex-card"><b class="ex-legend">Legendary</b><small>%5</small></div><div class="ex-card"><b class="ex-secret-text">Secret</b><small>%1</small></div></div>`}
+if(page==='pets'){html=`<p class="ex-help">Petler karakterin yanında görünür ve pasif para bonusu verir. Sadece bir pet kuşanılır; aynı türden ikinci pet satın alınabilir ve takasta kullanılabilir.</p><div class="ex-grid">${petNames.map((n,i)=>{const owned=x.pets.filter(k=>k===i+1).length;const price=Math.floor(1500*Math.pow(i+1,2.25));return `<article class="ex-card"><div class="emblem">${petEmojis[i]}</div><b>${n}</b><small>+%${(i+1)*5} para • Sahip: ${owned}</small><small>${money(price)} 🪙</small>${b('buyPet:'+i,'SATIN AL',state.cash<price)}${owned?b('equipPet:'+i,x.pet===i+1?'✓ KUŞANILDI':'KUŞAN',x.pet===i+1):''}</article>`}).join('')}</div>`}
+if(page==='evolve'){html=`<p class="ex-help">Evrim ağacında 4 bağımsız dal var. Her yükseltme giderek pahalılaşır, bonuslar kalıcıdır ve Rebirth sonrası da kalır.</p><div class="ex-grid">${evoNames.map((n,i)=>{const lev=x.evo[i];const cost=Math.round(500*Math.pow(2.8,lev)*Math.pow(2,i));const effect=['Her seviye +%15 para','Her seviye +%20 para','Her seviye +%20 XP','Her seviye +%35 XP'][i];return `<article class="ex-card"><div class="emblem">${['🧪','🖤','💎','🧬'][i]}</div><b>${n}</b><small>Seviye: ${lev}/12</small><small>${effect}</small><small>${money(cost)} 🪙</small>${b('evo:'+i,'GELİŞTİR',lev>=12||state.cash<cost)}</article>`}).join('')}</div>`}
+if(page==='daily'){const can=x.lastDaily!==stamp();html=`<div class="ex-highlight"><b>${can?'Günlük ödül hazır!':'Bugünkü ödülünü zaten aldın.'}</b><p>Her gün bir kez 7 günlük ödül döngüsünden hediye kazanırsın.</p>${b('daily','📅 ÖDÜLÜ AL',!can)}</div><div class="ex-grid">${dailyGold.map((v,i)=>`<div class="ex-card"><b>Gün ${i+1}</b><div class="emblem">${i===6?'👑':'🪙'}</div><small>${money(v)} altın</small></div>`).join('')}</div>`}
+if(page==='realm'){html=`<div class="ex-highlight"><b>👁️ FORSAKEN REALM</b><p>Forsaken etkinliği sırasında kırmızı dünya zaten otomatik etkinleşir. Buradaki düğmeyle özel karanlık atmosferi istediğin zaman sadece kendin için açıp kapatabilirsin.</p>${b('realm',x.realm?'🌑 KARANLIK DÜNYAYI KAPAT':'👁️ KARANLIK DÜNYAYI AÇ')}</div><p class="ex-help">Kırmızı sis, karanlık gökyüzü, glitch çizgileri ve Forsaken silueti; mevcut global event sistemine zarar vermez.</p>`}
+if(page==='secret'){html=`<p class="ex-help">Secret Eventler sadece doğrulanmış admin tarafından başlatılır. Oyuncular yalnızca etkinliği görür. Global eventi başlatmak için Ü tuşuyla admin panelini aç.</p><div class="ex-grid"><div class="ex-card"><div class="emblem">🔐</div><b>Gizli Kızıl Alarm</b><small>3× pasif para, 2× XP; kırmızı karanlık efekt.</small><small>Global event #5</small>${b('secretAdmin','🔐 ADMİN PANELİNİ AÇ')}</div><div class="ex-card"><div class="emblem">👁️</div><b>Forsaken Uyanışı</b><small>Mevcut Forsaken global eventi (#4), Dead Ringer müziği.</small>${b('secretAdmin','🔐 ADMİN PANELİNİ AÇ')}</div></div>`}
+if(page==='rank'){html=`<p class="ex-help">${refStatus()} Oyuncu adın ve kazanç bilgilerinin sunucuya gönderilmesi için Katıl butonuna bas. Herkese açık sıralama deneme amaçlıdır; mevcut oyunda altın istemcide saklandığından rekabetçi doğrulama için sunucu-taraflı para sistemi gerekir.</p><div class="ex-row"><input id="exName" maxlength="20" placeholder="Oyuncu adı (ör. Noob123)" value="${escapeText(x.playerName)}">${b('join','🌐 KATIL / GÜNCELLE')}</div><div id="exRankResult"><p class="ex-help">Sıralama yükleniyor…</p></div>`;setTimeout(fetchRanks,0)}
+if(page==='trade'){html=`<p class="ex-help">Bu beta sistem tek yönlü pet gönderme teklifidir; karşılıklı güvenli takas henüz değildir. İki taraf onaylamadan tamamlanmaz; hesabının gizli cihaz anahtarı kullanılır. Sunucuya bağlanmıyorsa takas yapılamaz. Kalıcı gerçek ekonomi için veritabanı gerekir.</p><div class="ex-highlight">Oyuncu adın: <b>${escapeText(x.playerName)||'Henüz oluşturulmadı'}</b><p>Önce Liderlik bölümünden oyuncu adıyla kaydol.</p></div><div class="ex-row"><input id="exTradeTo" placeholder="Alıcı oyuncu adı" maxlength="20"><select id="exTradePet">${petNames.map((n,i)=>`<option value="${i+1}">${petEmojis[i]} ${n} (${x.pets.filter(p=>p===i+1).length})</option>`).join('')}</select>${b('tradeCreate','📨 TAKAS TEKLİFİ')}</div><div id="exTradeResult">Takas listesi yükleniyor…</div>`;setTimeout(fetchTrades,0)}
+content.innerHTML=html;notice.textContent='';}
+function escapeText(s){return String(s||'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
+function effectStatus(){let stage=document.getElementById('stage');stage.classList.toggle('ex-forsaken-world',!!x.realm||activeEvent===4||activeEvent===5);let pet=stage.querySelector('#exPet');if(!pet){pet=document.createElement('div');pet.className='ex-pet-float';pet.id='exPet';stage.appendChild(pet)}pet.innerHTML=x.pet>0&&x.pets.includes(x.pet)?petEmojis[x.pet-1]+'<span>'+escapeText(petNames[x.pet-1])+'</span>':'';pet.hidden=!(x.pet>0&&x.pets.includes(x.pet));}
+function syncHud(){document.getElementById('incomeTop').textContent=money(Math.max(5,Math.floor(income()*cashBoost()*pBonus())));document.getElementById('income').textContent='+'+money(Math.max(5,Math.floor(income()*cashBoost()*pBonus())))+' 🪙/sn'}
+const originalTick=tick;
+tick=function(){if(!window.VENOM_AUTHORIZED)return;const before=state.cash,xpBefore=state.xp;originalTick();let added=Math.max(0,state.cash-before);const ratio=Math.max(1,cashBoost()*pBonus());state.cash+=Math.floor(added*(ratio-1));const xpAfter=state.xp; if(xpAfter>=xpBefore){const gained=xpAfter-xpBefore;state.xp+=Math.floor(gained*(xpBoost()-1))}syncHud();document.getElementById('cashTop').textContent=money(state.cash);document.getElementById('cash').textContent=money(state.cash)+' 🪙';save();effectStatus();};
+const oldDisplay=display;display=function(){oldDisplay();syncHud();effectStatus()};
+// Generate a unique device identity for online features, never expose the secret in the page UI.
+function identity(){if(!x.playerId)x.playerId='v_'+cryptoRandom(24);if(!x.playerToken)x.playerToken=cryptoRandom(64);clean();}
+function cryptoRandom(n){const a=new Uint8Array(n/2);if(window.crypto&&crypto.getRandomValues)crypto.getRandomValues(a);else for(let i=0;i<a.length;i++)a[i]=Math.floor(Math.random()*256);return Array.from(a,v=>v.toString(16).padStart(2,'0')).join('')}
+async function api(uri,method='GET',payload){const r=await fetch(uri,{method,headers:{'Content-Type':'application/json','X-Player-Token':x.playerToken||''},credentials:'same-origin',body:payload?JSON.stringify(payload):undefined,signal:AbortSignal.timeout(9000)});const v=await r.json();if(!r.ok||!v.ok)throw Error(v.error||'Bağlantı hatası '+r.status);return v}
+async function join(){const input=document.getElementById('exName');const name=(input?.value||'').trim();if(!/^[\p{L}\p{N}_ -]{3,20}$/u.test(name)){tell('Oyuncu adı 3–20 karakter olmalı.');return}identity();try{await api('/api/players','POST',{id:x.playerId,token:x.playerToken,name,level:state.level,cash:state.cash,rebirth:x.rebirth});x.playerName=name;clean();tell('✅ Global listeye eklendin.');await fetchRanks()}catch(e){tell(e.message+' • Web Service kullandığından emin ol.')}}
+async function fetchRanks(){const el=document.getElementById('exRankResult');if(!el)return;try{const r=await api('/api/leaderboard');el.innerHTML=r.players.map((p,i)=>`<div class="ex-rank"><b>${i+1}.</b><b>${escapeText(p.name)}</b><span>${money(p.cash)} 🪙</span><span>♻️ ${p.rebirth||0}</span></div>`).join('')||'<p>Henüz oyuncu yok.</p>'}catch(e){el.innerHTML='<p class="ex-help">🌐 Global liste için güncellenmiş Web Service gerekli: '+escapeText(e.message)+'</p>'}}
+async function fetchTrades(){const el=document.getElementById('exTradeResult');if(!el||!x.playerId)return;try{const r=await api('/api/trades?player='+encodeURIComponent(x.playerId));for(const sent of x.sentTrades){const t=r.trades.find(k=>k.id===sent.id);if(t&&t.status==='cancelled'&&!sent.restored){x.pets.push(sent.pet);sent.restored=true;clean()}}el.innerHTML=r.trades.map(t=>`<div class="ex-vault"><b>${escapeText(t.fromName)} → ${escapeText(t.toName)}</b><span>${petEmojis[t.pet-1]||'🐾'} ${escapeText(petNames[t.pet-1]||'Pet')} • ${t.status}</span>${t.status==='pending'&&t.to===x.playerId?b('tradeAccept:'+t.id,'✅ KABUL ET'):''}${t.status==='pending'&&t.from===x.playerId?b('tradeCancel:'+t.id,'İPTAL'):''}</div>`).join('')||'<p>Henüz takas teklifi yok.</p>'}catch(e){el.textContent='Takas servisi çalışmıyor: '+e.message}}
+async function tradeCreate(){const to=(document.getElementById('exTradeTo')?.value||'').trim();const pet=Number(document.getElementById('exTradePet')?.value);if(!x.playerName){tell('Önce Liderlik bölümünden oyuncu adıyla kaydol.');return}if(!x.pets.includes(pet)){tell('Bu pet sende yok.');return}try{const r=await api('/api/trades','POST',{action:'create',id:x.playerId,token:x.playerToken,toName:to,pet,ownedPets:x.pets});x.pets.splice(x.pets.indexOf(pet),1);if(x.pet===pet&&!x.pets.includes(pet))x.pet=0;x.sentTrades.push({id:r.trade.id,pet,restored:false});clean();effectStatus();tell('✅ Pet teklif için ayrıldı. Alıcı kabul ederse ona geçer; iptal edersen geri gelir.');await fetchTrades()}catch(e){tell(e.message)}}
+async function tradeAct(id,action){try{const r=await api('/api/trades','POST',{action,id,playerId:x.playerId,token:x.playerToken,ownedPets:x.pets});if(action==='accept'){const t=r.trade;if(t.to===x.playerId){x.pets.push(t.pet);clean()}}if(action==='cancel'){const sent=x.sentTrades.find(o=>o.id===id);if(sent&&!sent.restored){x.pets.push(sent.pet);sent.restored=true;clean()}}tell('Takas durumu güncellendi.');await fetchTrades()}catch(e){tell(e.message)}}
+content.addEventListener('click',async e=>{const button=e.target.closest('[data-xact]');if(!button)return;const [act,arg]=button.dataset.xact.split(':');if(act==='rebirth'){if(state.level<lvlReq())return;state.level=1;state.xp=0;state.cash=0;x.rebirth++;clean();display();save();draw();tell('♻️ Rebirth tamamlandı! Kalıcı para bonusu artırıldı.')}
+if(act==='crate'){const cost=2500*Math.pow(2,Math.floor(x.boxCount/4));if(state.cash<cost)return;state.cash-=cost;x.boxCount++;const r=Math.random()*100;let start,end;if(r<50){start=0;end=20}else if(r<80){start=20;end=35}else if(r<94){start=35;end=44}else if(r<99){start=44;end=49}else{start=49;end=50}const skin=start+Math.floor(Math.random()*(end-start));let duplicate=state.ownedSkins.includes(skin);if(!duplicate)state.ownedSkins.push(skin);else state.cash+=Math.floor(cost/2);clean();save();display();draw();tell((duplicate?'Tekrar çıkan skin: ':'🎉 Yeni skin: ')+SKINS[skin].name+(duplicate?' • %50 iade!':''))}
+if(act==='buyPet'){let i=+arg;const cost=Math.floor(1500*Math.pow(i+1,2.25));if(state.cash<cost)return;state.cash-=cost;x.pets.push(i+1);clean();save();display();draw();tell(petNames[i]+' satın alındı!')}
+if(act==='equipPet'){x.pet=+arg+1;clean();effectStatus();draw()}
+if(act==='evo'){let i=+arg;const lev=x.evo[i];const cost=Math.round(500*Math.pow(2.8,lev)*Math.pow(2,i));if(lev>=12||state.cash<cost)return;state.cash-=cost;x.evo[i]++;clean();save();display();draw();tell(evoNames[i]+' geliştirildi!')}
+if(act==='daily'){if(x.lastDaily===stamp())return;let day=(x.dailyDay||0)%7;state.cash+=dailyGold[day];x.dailyDay=day+1;x.lastDaily=stamp();clean();save();display();draw();tell('Günlük ödül: +'+money(dailyGold[day])+' 🪙')}
+if(act==='realm'){x.realm=!x.realm;clean();effectStatus();draw()}
+if(act==='secretAdmin'){close();openAdmin()}
+if(act==='join')await join();if(act==='tradeCreate')await tradeCreate();if(act==='tradeAccept')await tradeAct(arg,'accept');if(act==='tradeCancel')await tradeAct(arg,'cancel');});
+// Add secret fifth event and make it accessible solely from admin event controls.
+if(Array.isArray(EVENTS)&&EVENTS.length===4){EVENTS.push({name:'🔐 Kızıl Alarm • Secret',desc:'Gizli admin etkinliği. 3× para ve 2× XP, şiddetsiz glitch atmosferi.',effect:'Para ×3 • XP ×2',track:'Dead Ringer — Secret Remix'});}
+const oldLocalSet=localSetEvent;
+localSetEvent=function(n){oldLocalSet(n);effectStatus();};
+// Allow remote event #5 (server permits 0..5).
+const oldApply=applyGlobalEvent;
+applyGlobalEvent=function(ev){if(ev&&Number(ev.num)===5){const was=activeEvent;activeEvent=5;oldApply({...ev,num:4});activeEvent=5;document.getElementById('stage').dataset.event='4';document.getElementById('eventBanner').textContent='🔐 KIZIL ALARM • 3× PARA • 2× XP';effectStatus();return;}oldApply(ev);effectStatus()};
+const oldTick=tick;
+tick=function(){if(activeEvent!==5){oldTick();return;}const before=state.cash;oldTick();state.cash+=Math.max(0,2*(state.cash-before));state.xp+=Math.max(1,Math.floor(state.level/14)+1);display();save()};
+const oldRenderEvents=renderEvents;
+renderEvents=function(){oldRenderEvents();const root=document.getElementById('eventGrid');if(root&&!root.querySelector('[data-secret-event="5"]')){let item=document.createElement('div');item.className='admin-event';item.dataset.secretEvent='5';item.innerHTML='<b>🔐 KIZIL ALARM</b><small>Secret Event • 3× para, 2× XP. Sadece admin başlatabilir.</small><button type="button" id="exStartSecret">🔐 HERKES İÇİN BAŞLAT</button>';root.appendChild(item);item.querySelector('button').onclick=()=>setEvent(5)}};
+renderEvents();effectStatus();syncHud();
+// Show server-backed progress when available. Rate-limited to prevent flooding.
+let lastSync=0;setInterval(()=>{if(!x.playerName||!x.playerId||Date.now()-lastSync<30000)return;lastSync=Date.now();api('/api/players','POST',{id:x.playerId,token:x.playerToken,name:x.playerName,level:state.level,cash:state.cash,rebirth:x.rebirth}).catch(()=>{})},32000);
 })();
 </script>
 </body></html>
