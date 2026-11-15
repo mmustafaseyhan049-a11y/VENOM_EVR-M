@@ -117,7 +117,7 @@
 <aside class="panel right"><p class="smalltitle">MARKETLER</p><button class="btn fill" id="skinBtn">🎭 50 SKIN • MARKET</button><button class="btn fill alt" id="auraBtn">✨ 23 AURA • MARKET</button><hr><p class="smalltitle">SEÇİLİ SKIN</p><div id="skinSummary"><b>Klasik Venom</b><p>Para bonusu: %0</p></div><hr><p class="smalltitle">SEÇİLİ AURA</p><div id="auraSummary"><b>Aura yok</b><p>Auralar sadece görünüş içindir.</p></div><hr><button class="btn fill alt" id="adminVisible">🔐 ADMIN PANELİ</button><span class="badge">💾 Otomatik kayıt</span><p class="hint">🔐 Admin paneli: <b>Ü</b> tuşu</p><p>Bu oyun savaş içermez. Karakter ekranda sana dönük durur; para ve XP her saniye otomatik gelir.</p></aside></main>
 <div class="modal" id="modal" aria-hidden="true"><div class="window" role="dialog" aria-modal="true" aria-labelledby="shopTitle"><div class="window-head"><h2 id="shopTitle">MARKET</h2><button class="close" id="close">✕ Kapat</button></div><div class="shop-switch"><button class="btn" id="tabSkins">🎭 Skinler (50)</button><button class="btn alt" id="tabAuras">✨ Auralar (23)</button></div><p class="hint" id="shopInfo"></p><div class="shop-grid" id="shopGrid"></div></div></div>
 <div class="modal" id="adminModal" aria-hidden="true"><div class="window admin-window" role="dialog" aria-modal="true" aria-labelledby="adminTitle"><div class="window-head"><h2 id="adminTitle">🔐 ADMIN PANELİ</h2><button class="close" id="adminClose">✕ Kapat</button></div><div id="adminLogin"><p class="hint">Admin panelini açmak için şifreyi gir.</p><label for="adminPassword">Şifre</label><input id="adminPassword" type="password" autocomplete="off" placeholder="Admin şifresi"/><button id="adminEnter" class="btn fill">GİRİŞ YAP</button></div><div id="adminControls" hidden><label for="adminMoney">Hesabına eklenecek para miktarı</label><input id="adminMoney" type="text" inputmode="decimal" placeholder="Örnek: 1000000000"/><div class="quick-row"><button type="button" data-quick="1000">+1.000</button><button type="button" data-quick="1000000">+1 MİLYON</button><button type="button" data-quick="1000000000">+1 MİLYAR</button><button type="button" data-quick="1000000000000">+1 TRİLYON</button></div><button id="adminAdd" class="btn fill">🪙 PARAYI EKLE</button><p class="hint">Mevcut paran: <b id="adminBalance">0</b> 🪙</p><div class="admin-section"><h3>🎉 EVENT KONTROLÜ</h3><p class="hint">Etkinlikler sınırlı süreli özel bonuslar sağlar. Sağ alttan kalan süreyi görebilirsin. Gönderdiğin MP3 dosyaları HTML içine gömülüdür ve event süresince otomatik döngüde çalar.</p><label for="eventDuration">Event süresi (dakika)</label><input id="eventDuration" class="event-duration" type="number" min="1" max="120" value="5" />
-<div class="admin-grid" id="eventGrid"></div>
+<div style="padding:12px;margin:12px 0;border:1px solid #78abfb;border-radius:12px;background:#112345"><b>🌐 HERKESE AÇIK CANLI EVENT</b><p style="font-size:12px;color:#b9d7fb">Eventi tüm oyunculara göndermek için Render Web Service adresini aşağıya yaz. Adres yoksa event başlatılamaz; yalnızca bu tarayıcıda çalışıyormuş gibi gösterilmez.</p><input id="globalEventApi" type="url" placeholder="https://venom-event-api.onrender.com" style="width:100%"/><button type="button" id="saveGlobalEventApi" class="btn fill" style="margin:8px 0">🌐 BAĞLANTIYI KAYDET / TEST ET</button><div id="globalEventStatus" role="status" style="font-size:12px;color:#f6d08a">Sunucu bağlantısı kontrol ediliyor...</div></div><div class="admin-grid" id="eventGrid"></div>
 <section id="eventMusicDock" class="music-dock" aria-label="Admin müzik yönetimi">
 <div class="music-head"><strong>🎵 EVENT MÜZİKLERİ</strong><span id="musicName">Event seçilmedi</span></div>
 <p class="music-tip">Gönderdiğin gerçek MP3 dosyaları oyunun içine eklendi. Event başlarken şarkı başlar, bitene kadar sürekli tekrarlar, event bitince durur. İnternet gerekmez.</p>
@@ -127,7 +127,7 @@
 <div class="music-actions"><button id="musicShow" type="button">▶ EVENT MÜZİĞİNİ ÇAL</button><button id="musicHide" type="button">⏸ MÜZİĞİ DURDUR</button></div>
 <label for="musicVolume">Ses seviyesi: <output id="volumeText">60%</output></label><input type="range" id="musicVolume" min="0" max="100" value="60" style="width:100%">
 <p id="eventMusicStatus" class="hint" aria-live="polite">Bir event başlatınca uygun MP3 otomatik çalar.</p>
-</section><div class="quick-row" style="margin-top:12px"><button id="eventStop">⏹ Etkinliği durdur</button></div><p id="eventStatus" class="hint">Etkinlik kapalı.</p></div></div><p class="admin-message" id="adminMessage" aria-live="polite"></p><p class="hint">Kısayol: Ü tuşu veya ekrandaki 🔐 butonu • Yerel tek oyunculu oyun</p></div></div>
+</section><div class="quick-row" style="margin-top:12px"><button id="eventStop">⏹ Etkinliği durdur</button></div><p id="eventStatus" class="hint">Etkinlik kapalı.</p></div></div><p class="admin-message" id="adminMessage" aria-live="polite"></p><p class="hint">Kısayol: Ü tuşu veya ekrandaki 🔐 butonu • Eventler sunucu bağlantısıyla herkese yayınlanır</p></div></div>
 <div id="eventHud" aria-live="polite" style="position:fixed;right:14px;bottom:14px;z-index:35;background:#131c34f2;border:2px solid #9574ff;border-radius:16px;padding:13px 16px;min-width:220px;box-shadow:0 6px 30px #000a;display:none"><b id="hudName">EVENT</b><div id="hudTime" style="font-size:26px;font-weight:900;color:#ffe07d;margin:4px 0">00:00 KALDI</div><div id="hudEffect" style="font-size:12px;color:#bbd7fd"></div><div style="height:8px;border-radius:8px;background:#303b55;margin-top:10px;overflow:hidden"><div id="hudProgress" style="background:#7feab8;height:100%;width:100%"></div></div></div>
 <script>
 'use strict';
@@ -336,7 +336,7 @@ function openAdmin(){
 }
 function closeAdmin(){$('adminModal').classList.remove('open');$('adminModal').setAttribute('aria-hidden','true');$('adminPassword').value=''}
 function adminLogin(){if($('adminPassword').value==='mustafa099'){
- adminUnlocked=true;$('adminLogin').hidden=true;$('adminControls').hidden=false;
+ adminUnlocked=true;$('adminPassword').dataset.sessionPassword=$('adminPassword').value;$('adminLogin').hidden=true;$('adminControls').hidden=false;
  $('adminMessage').textContent='✓ Giriş başarılı.';$('adminMoney').focus();
  }else{$('adminMessage').textContent='Şifre yanlış.';$('adminPassword').value='';}}
 function adminAdd(value){
@@ -393,7 +393,7 @@ function playEventMusic(num){
 }
 function hudClock(ms){const sec=Math.max(0,Math.ceil(ms/1000));return String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0')}
 function updateEventHUD(){
- if(activeEvent && Date.now()>=eventEndsAt){setEvent(0);return}
+ if(activeEvent && Date.now()>=eventEndsAt){applyGlobalEvent({num:0,endsAt:0,startedAt:0,revision:globalRevision+1});return}
  const active=activeEvent>0,remain=active?Math.max(0,eventEndsAt-Date.now()):0;
  $('eventHud').style.display=active?'block':'none';
  if(!active)return;
@@ -403,7 +403,7 @@ function updateEventHUD(){
  $('hudProgress').style.width=(100*remain/Math.max(1,eventTotalMs)).toFixed(2)+'%';
  $('eventStatus').textContent=ev.name+' • '+hudClock(remain)+' kaldı • '+ev.effect;
 }
-function setEvent(num){
+function localSetEvent(num){
  num=Number(num)||0;
  if(num&&!EVENTS[num-1])return;
  activeEvent=num;eventStartedAt=Date.now();eventTickIndex=0;
@@ -418,6 +418,81 @@ function setEvent(num){
  else{stopEventMusic();$('musicName').textContent='Event seçilmedi';musicStatus('Event bitti. Müzik durduruldu.');}
  renderEvents();updateEventHUD();save();
 }
+// GLOBAL EVENTS: shared server state; local storage is not a shared event backend.
+const GLOBAL_EVENT_KEY='venom_global_event_url_v1';
+let globalApi=(localStorage.getItem(GLOBAL_EVENT_KEY)||'').trim().replace(/\/+$/,'');
+let globalRevision=-1,globalEventStart=0,globalSyncBusy=false,globalConnected=false;
+function eventApiBase(){
+ if(globalApi)return globalApi;
+ // Same-origin mode for a Render Web Service serving the HTML plus /api/event.
+ if(location.protocol==='http:'||location.protocol==='https:')return location.origin;
+ return '';
+}
+function globalMessage(msg,ok=false){
+ $('globalEventStatus').textContent=msg;
+ $('globalEventStatus').style.color=ok?'#81edb1':'#ffd37e';
+}
+function applyGlobalEvent(ev){
+ if(!ev || !Number.isInteger(Number(ev.num)))return;
+ const num=Math.max(0,Math.min(4,Number(ev.num)));
+ const start=Number(ev.startedAt)||0, end=Number(ev.endsAt)||0;
+ const revision=Number(ev.revision)||0;
+ if(revision<globalRevision)return;
+ const changed=num!==activeEvent || start!==globalEventStart;
+ globalRevision=revision;
+ if(changed){
+   localSetEvent(num); // Updates animations, event labels and music on THIS player.
+   globalEventStart=start;
+ }
+ activeEvent=num;
+ eventStartedAt=start;eventEndsAt=end;
+ eventTotalMs=num?Math.max(1,end-start):0;
+ updateEventHUD();
+}
+async function syncGlobalEvent(force=false){
+ const base=eventApiBase();
+ if(!base){globalConnected=false;globalMessage('Bağlantı yok. Render Web Service URL adresini gir.');return;}
+ if(globalSyncBusy&&!force)return;
+ globalSyncBusy=true;
+ try{
+  const resp=await fetch(base+'/api/event',{method:'GET',cache:'no-store',signal:AbortSignal.timeout(8000)});
+  if(!resp.ok)throw Error('HTTP '+resp.status);
+  const data=await resp.json();
+  if(!data || !data.ok)throw Error('API yanıtı geçersiz');
+  globalConnected=true;
+  globalMessage('🟢 Canlı yayın bağlı — eventler herkese açık',true);
+  applyGlobalEvent(data.event);
+ }catch(e){globalConnected=false;globalMessage('🔴 Bağlanılamadı: '+e.message+' — Herkese event gönderilemez.');}
+ finally{globalSyncBusy=false;}
+}
+async function setEvent(num){
+ num=Number(num)||0;
+ if(!adminUnlocked){globalMessage('Event başlatmak için admin girişi yap.');return;}
+ const base=eventApiBase();
+ if(!base){globalMessage('Önce Render Web Service URL adresini gir.');return;}
+ const minutes=Math.max(1,Math.min(120,Math.floor(Number($('eventDuration').value)||5)));
+ globalMessage('Event tüm oyunculara gönderiliyor...');
+ try{
+  const response=await fetch(base+'/api/event',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Password':$('adminPassword').dataset.sessionPassword||''},body:JSON.stringify({num,minutes}),signal:AbortSignal.timeout(10000)});
+  const d=await response.json().catch(()=>({}));
+  if(!response.ok||!d.ok)throw Error(d.error||('HTTP '+response.status));
+  applyGlobalEvent(d.event);
+  globalConnected=true;
+  globalMessage('✅ '+(num?'Event herkese yayınlandı!':'Event herkes için durduruldu!'),true);
+ }catch(e){globalMessage('❌ Gönderilemedi: '+e.message);}
+}
+$('saveGlobalEventApi').onclick=()=>{
+ globalApi=$('globalEventApi').value.trim().replace(/\/+$/,'');
+ if(globalApi && !/^https:\/\/[A-Za-z0-9.-]+(?::\d+)?$/.test(globalApi)){
+  globalMessage('HTTPS ile başlayan yalnızca sunucu adresini gir. /api/event ekleme.');return;
+ }
+ localStorage.setItem(GLOBAL_EVENT_KEY,globalApi);
+ syncGlobalEvent(true);
+};
+$('globalEventApi').value=globalApi;
+setInterval(()=>syncGlobalEvent(),2000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncGlobalEvent(true)});
+setTimeout(()=>syncGlobalEvent(true),400);
 function renderEvents(){
  $('eventGrid').innerHTML=EVENTS.map((ev,i)=>`<div class="admin-event ${activeEvent===i+1?'active':''}"><b>${ev.name}</b><small>${ev.desc}</small><span class="event-description">✨ ${ev.effect}</span><span class="event-track">🎵 ${ev.track}</span><button type="button" data-event="${i+1}">${activeEvent===i+1?'↻ EVENTİ YENİDEN BAŞLAT':'▶ EVENT BAŞLAT'}</button></div>`).join('')
 }
