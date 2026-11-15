@@ -109,7 +109,7 @@ http.createServer((req,res)=>{
   req.on('end',()=>{
    let d;try{d=JSON.parse(raw);}catch{return send(req,res,400,{ok:false,error:'Geçersiz veri'});}
    const num=Number(d.num),minutes=Number(d.minutes);
-   if(!Number.isInteger(num)||num<0||num>5)return send(req,res,400,{ok:false,error:'Event 0–5 olmalı.'});
+   if(!Number.isInteger(num)||num<0||num>4)return send(req,res,400,{ok:false,error:'Event 0–4 olmalı.'});
    if(!Number.isInteger(minutes)||minutes<1||minutes>120)return send(req,res,400,{ok:false,error:'Süre 1–120 dakika olmalı.'});
    const now=Date.now();event={num,startedAt:num?now:0,endsAt:num?now+minutes*60000:0,revision:event.revision+1};
    return send(req,res,200,{ok:true,event});

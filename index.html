@@ -59,6 +59,7 @@
 .ex-pet-float{position:absolute;bottom:130px;right:2%;z-index:4;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:36px;animation:breathe 2s infinite;pointer-events:none;filter:drop-shadow(0 0 14px #d577ff)}.ex-pet-float span{font-size:10px;color:#e5d4ff;background:#121629a8;border-radius:9px;padding:3px 7px}
 @media(max-width:650px){.ex-window{padding:13px}.ex-head{top:-13px}.ex-toolbar{padding:9px}.ex-toolbar button{font-size:11px;padding:8px}.ex-rank{grid-template-columns:25px 1fr 75px 60px;font-size:11px}}
 
+.afk-toast{position:fixed;left:50%;top:13%;transform:translateX(-50%);max-width:min(90vw,520px);padding:15px 22px;border-radius:15px;border:2px solid #87ffbc;background:#0d2a25f5;box-shadow:0 8px 36px #000a;color:#daffe8;font-weight:900;z-index:999999;text-align:center}.ex-toolbar button[data-ex="afk"]{background:#185b49;border-color:#66d9a3}.ex-toolbar button[data-ex="afk"]:hover{background:#237862}
 </style></head><body>
 <section id="venomAuthGate" aria-label="Venom hesap girişi">
  <div class="va-card">
@@ -113,7 +114,7 @@
  <button type="button" data-ex="rank">🏆 Liderlik</button>
  <button type="button" data-ex="trade">🔄 Takas</button>
  <button type="button" data-ex="realm">👁️ Forsaken Dünyası</button>
- <button type="button" data-ex="secret" class="ex-secret">🔐 Secret Event</button>
+ <button type="button" data-ex="afk">💤 AFK</button>
 </nav>
 <div id="exModal" role="dialog" aria-modal="true" aria-labelledby="exTitle"><div class="ex-window"><div class="ex-head"><h2 id="exTitle">VENOM EVRİM</h2><button type="button" class="ex-close" id="exClose">✕ Kapat</button></div><div id="exContents"></div><p id="exStatus" class="ex-status" aria-live="polite"></p></div></div>
 
@@ -635,7 +636,7 @@ function particle(){return {t:Math.random()*Math.PI*2,r:70+Math.random()*115,pha
 for(let i=0;i<100;i++)particles.push(particle());
 function frame(time){ctx.clearRect(0,0,cw,ch);const a=state.aura;if(a){const c=AURAS[a].color,t=time*.001,cx=cw/2,cy=ch*.47;if(a===24){ctx.save();ctx.globalCompositeOperation='screen';ctx.globalAlpha=.8;ctx.strokeStyle=c;ctx.fillStyle=c;ctx.shadowColor=c;ctx.shadowBlur=18;for(let ring=0;ring<3;ring++){ctx.beginPath();ctx.ellipse(cx,cy,95+ring*18+Math.sin(t*2+ring)*8,48+ring*8,0,0,Math.PI*2);ctx.stroke()}for(let side of [-1,1]){for(let i=0;i<5;i++){const ox=side*(115+i*12),oy=-28+i*14;ctx.beginPath();ctx.moveTo(cx+ox,cy+oy);ctx.lineTo(cx+ox+side*18,cy+oy-10);ctx.lineTo(cx+ox+side*10,cy+oy+12);ctx.closePath();ctx.fill()}}ctx.beginPath();ctx.arc(cx,cy,16+Math.sin(t*3)*3,0,Math.PI*2);ctx.fill();for(let i=0;i<8;i++){const ang=t*1.8+i*Math.PI/4;const rx=145, ry=76;const x=cx+Math.cos(ang)*rx, y=cy+Math.sin(ang)*ry;ctx.beginPath();ctx.moveTo(x,y-8);ctx.lineTo(x+8,y);ctx.lineTo(x,y+8);ctx.lineTo(x-8,y);ctx.closePath();ctx.globalAlpha=.45+.35*Math.sin(t*4+i);ctx.fill()}ctx.restore();requestAnimationFrame(frame);return;}ctx.save();ctx.globalCompositeOperation='screen';for(let i=0;i<65;i++){const p=particles[i],k=p.t+t*p.speed*(i%2?1:-1),ang=k+(a%3===0?Math.sin(t*2+i)*.3:0),r=p.r*(a===20?.53:1),x=cx+Math.cos(ang)*r*(a===17?1.25:1),y=cy+Math.sin(ang)*r*.99;let s=p.size*(a===6||a===17?1.1:.7);let yy=y;if([2,3,5,14,16].includes(a)) yy=cy+((y-cy)-((t*25+i*33)%300)+300)%300-150;if(a===18)yy=y+Math.sin(t+i)*22;ctx.globalAlpha=.25+.5*(.5+.5*Math.sin(p.phase+t*(1+a%4)));ctx.fillStyle=(a===8||a===22)?`hsl(${(i*29+t*46)%360} 100% 68%)`:c;ctx.shadowColor=ctx.fillStyle;ctx.shadowBlur=(a===4||a===16?19:12);ctx.beginPath();if([6,11,17,21,22].includes(a)){const pts=a===6?4:5;for(let j=0;j<pts*2;j++){let rr=j%2?s*.5:s*1.5,an=j*Math.PI/pts-Math.PI/2;let xx=x+Math.cos(an)*rr,py=yy+Math.sin(an)*rr;if(j===0)ctx.moveTo(xx,py);else ctx.lineTo(xx,py)}ctx.closePath()}else if([3,9,15,19].includes(a)){ctx.rect(x-s/2,yy-s/2,s,s*2)}else{ctx.arc(x,yy,s,0,Math.PI*2)}ctx.fill()}if([4,7,10,12,16,19,20,22].includes(a)){ctx.globalAlpha=.35;ctx.strokeStyle=c;ctx.lineWidth=a===16?3:1.5;ctx.shadowBlur=19;for(let k=0;k<3;k++){ctx.beginPath();for(let j=0;j<7;j++){const an=j*Math.PI/3+t*.7+k*2,x=cx+Math.cos(an)*(100+12*Math.sin(t*2+k+j)),y=cy+Math.sin(an)*150;if(j===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke()}}ctx.restore()}requestAnimationFrame(frame)}requestAnimationFrame(frame);
 // Catch up for elapsed time only while this page is running; each timer tick means one second.
-display();let lastMoneyTick=Date.now();setInterval(()=>{const now=Date.now();let elapsed=Math.min(20,Math.floor((now-lastMoneyTick)/1000));if(elapsed<1)return;lastMoneyTick+=elapsed*1000;for(let n=0;n<elapsed;n++)tick()},250);document.addEventListener('visibilitychange',()=>{if(document.hidden)save()});window.addEventListener('beforeunload',save);
+display();let lastMoneyTick=Date.now();setInterval(()=>{const now=Date.now();if(document.hidden||!window.VENOM_AUTHORIZED){lastMoneyTick=now;return;}let elapsed=Math.min(2,Math.floor((now-lastMoneyTick)/1000));if(elapsed<1)return;lastMoneyTick=now;tick()},250);document.addEventListener('visibilitychange',()=>{if(document.hidden)save()});window.addEventListener('beforeunload',save);
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
@@ -807,7 +808,7 @@ el('vaLogout').addEventListener('click',async()=>{
 const XKEY='venom_extra_features_v3';
 let x;
 try{x=JSON.parse(localStorage.getItem(XKEY)||'{}')}catch{x={}}
-x=Object.assign({rebirth:0,evo:[0,0,0,0],pets:[],pet:0,lastDaily:'',realm:false,boxCount:0,playerName:'',playerToken:'',playerId:'',trades:[],sentTrades:[]},x||{});
+x=Object.assign({rebirth:0,evo:[0,0,0,0],pets:[],pet:0,lastDaily:'',realm:false,boxCount:0,playerName:'',playerToken:'',playerId:'',trades:[],sentTrades:[],afkOwned:false,afkArmed:false,afkStartedAt:0,afkRate:0,afkAccount:''},x||{});
 const petNames=['Gece Küresi','Şimşek Topu','Mavi Hayalet','Alev Yavrusu','Zehir Damlası','Kutup Tilkisi','Mini Simbiyot','Kristal Yarasa','Gökkuşağı Perisi','Zümrüt Baykuş','Kozmik Kurbağa','Kızıl Kedi','Ay Kelebeği','Buz Ejderi','Güneş Küresi','Neon Ruh','Obsidyen Kurt','Plazma Tavşan','Altın Akrep','Siber Panda','Yıldız Tilkisi','Mor Alev','Kayıp Piksel','Gölge Yılan','Kara Elmas','Galaksi Miniği','Sonsuz Tohum','Kuantum Balina','Forsaken Ruh','1X Muhafızı'];
 const petEmojis=['🌑','⚡','👻','🔥','☣️','🦊','🕷️','🦇','🦋','🦉','🐸','🐈','🦋','🐉','☀️','🪩','🐺','🐇','🦂','🐼','🌟','💜','👾','🐍','💎','🪐','🌱','🐳','👁️','🔱'];
 const evoNames=['Simbiyot Çekirdeği','Gölge Kol','Kristal Zırh','Evrim Enerjisi'];
@@ -830,19 +831,23 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
 function stamp(){const now=new Date();return now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0')}
 function refStatus(){return navigator.onLine?'🌐 Global sunucu mevcutsa sıralama ve takas çevrimiçi çalışır.':'🔴 Çevrimdışı mod.'}
 const b=(act,label,disabled=false)=>`<button class="ex-btn" data-xact="${act}" ${disabled?'disabled':''}>${label}</button>`;
-function draw(){title.textContent=({rebirth:'♻️ REBIRTH',crates:'🎁 SKIN KUTULARI',pets:'🐾 30 PET',evolve:'🧬 EVRİM AĞACI',daily:'📅 GÜNLÜK ÖDÜLLER',rank:'🏆 GLOBAL LİDERLİK',trade:'🔄 PET TAKASI',realm:'👁️ FORSAKEN DÜNYASI',secret:'🔐 SECRET EVENTLER'})[page]||'VENOM';let html='';
+function draw(){title.textContent=({rebirth:'♻️ REBIRTH',crates:'🎁 SKIN KUTULARI',pets:'🐾 30 PET',evolve:'🧬 EVRİM AĞACI',daily:'📅 GÜNLÜK ÖDÜLLER',rank:'🏆 GLOBAL LİDERLİK',trade:'🔄 PET TAKASI',realm:'👁️ FORSAKEN DÜNYASI',afk:'💤 AFK / ÇEVRİMDIŞI KAZANÇ'})[page]||'VENOM';let html='';
 if(page==='rebirth'){const ok=state.level>=lvlReq();html=`<div class="ex-highlight"><b>Rebirth: ${x.rebirth}</b><p>Gerekli seviye: ${lvlReq()} • Şu an: ${state.level}</p><p>Her Rebirth +%40 kalıcı para bonusu sağlar. Yeni doğuşta paran, seviye ve XP sıfırlanır; satın alınmış skin, aura ve petler kalır.</p><p>Mevcut çarpan: ×${cashBoost().toFixed(2)}</p>${b('rebirth','♻️ YENİDEN DOĞ',!ok)}</div>`}
 if(page==='crates'){let cost=2500*Math.pow(2,Math.floor(x.boxCount/4));html=`<p class="ex-help">Kutu açınca 50 mevcut skin içinden rastgele bir skin elde edersin. Daha nadir skinler daha düşük olasılıkla çıkar. Aynı skin gelirse kutu ücretinin yarısı iade edilir. Gerçek para kullanılmaz.</p><div class="ex-highlight">Açılmış kutu: ${x.boxCount} • Sonraki kutu: ${money(cost)} 🪙 <div class="ex-row">${b('crate','🎁 KUTUYU AÇ',state.cash<cost)}</div></div><div class="ex-grid"><div class="ex-card"><b>Common</b><small>%50</small></div><div class="ex-card"><b>Rare</b><small>%30</small></div><div class="ex-card"><b class="ex-rare">Epic</b><small>%14</small></div><div class="ex-card"><b class="ex-legend">Legendary</b><small>%5</small></div><div class="ex-card"><b class="ex-secret-text">Secret</b><small>%1</small></div></div>`}
 if(page==='pets'){html=`<p class="ex-help">Petler karakterin yanında görünür ve pasif para bonusu verir. Sadece bir pet kuşanılır; aynı türden ikinci pet satın alınabilir ve takasta kullanılabilir.</p><div class="ex-grid">${petNames.map((n,i)=>{const owned=x.pets.filter(k=>k===i+1).length;const price=Math.floor(1500*Math.pow(i+1,2.25));return `<article class="ex-card"><div class="emblem">${petEmojis[i]}</div><b>${n}</b><small>+%${(i+1)*5} para • Sahip: ${owned}</small><small>${money(price)} 🪙</small>${b('buyPet:'+i,'SATIN AL',state.cash<price)}${owned?b('equipPet:'+i,x.pet===i+1?'✓ KUŞANILDI':'KUŞAN',x.pet===i+1):''}</article>`}).join('')}</div>`}
 if(page==='evolve'){html=`<p class="ex-help">Evrim ağacında 4 bağımsız dal var. Her yükseltme giderek pahalılaşır, bonuslar kalıcıdır ve Rebirth sonrası da kalır.</p><div class="ex-grid">${evoNames.map((n,i)=>{const lev=x.evo[i];const cost=Math.round(500*Math.pow(2.8,lev)*Math.pow(2,i));const effect=['Her seviye +%15 para','Her seviye +%20 para','Her seviye +%20 XP','Her seviye +%35 XP'][i];return `<article class="ex-card"><div class="emblem">${['🧪','🖤','💎','🧬'][i]}</div><b>${n}</b><small>Seviye: ${lev}/12</small><small>${effect}</small><small>${money(cost)} 🪙</small>${b('evo:'+i,'GELİŞTİR',lev>=12||state.cash<cost)}</article>`}).join('')}</div>`}
 if(page==='daily'){const can=x.lastDaily!==stamp();html=`<div class="ex-highlight"><b>${can?'Günlük ödül hazır!':'Bugünkü ödülünü zaten aldın.'}</b><p>Her gün bir kez 7 günlük ödül döngüsünden hediye kazanırsın.</p>${b('daily','📅 ÖDÜLÜ AL',!can)}</div><div class="ex-grid">${dailyGold.map((v,i)=>`<div class="ex-card"><b>Gün ${i+1}</b><div class="emblem">${i===6?'👑':'🪙'}</div><small>${money(v)} altın</small></div>`).join('')}</div>`}
+if(page==='afk'){
+ const price=7.5e20;
+ const ready=!!x.afkOwned;
+ html=`<div class="ex-highlight"><b>💤 AFK MODU • ${money(price)} 🪙 (750Qi)</b><p>Oyunu kapatınca normalde para kazanılmaz. AFK iznini bir kez satın al; her çıkıştan önce AFK'yi etkinleştir. Geri geldiğinde kapalı kaldığın sürenin pasif parası hesabına eklenir.</p><p>AFK yalnızca para kazandırır, XP veya seviye vermez. Ödül geri girişte hesaplanır. Sunucuya bağlı olmayan yerel kayıttır.</p><b>${ready?'✅ AFK İZNİ SATIN ALINDI':'🔒 AFK İZNİ YOK'}</b><p>Çıkış için AFK: <strong>${x.afkArmed?'🟢 AÇIK':'⚪ KAPALI'}</strong></p><div class="ex-row">${!ready?b('afkBuy','🪙 750Qi — AFK İZNİ SATIN AL',state.cash<price):b('afkToggle',x.afkArmed?'⏸ AFK’Yİ KAPAT':'💤 ÇIKMADAN ÖNCE AFK’Yİ AÇ')}</div></div><p class="ex-help">AFK izni kalıcıdır. Ancak AFK'yi her ayrılıştan önce yeniden açman gerekir. Siteden ayrılmadığın sürece normal saniyelik kazanç çalışır.</p>`;
+}
 if(page==='realm'){html=`<div class="ex-highlight"><b>👁️ FORSAKEN REALM</b><p>Forsaken etkinliği sırasında kırmızı dünya zaten otomatik etkinleşir. Buradaki düğmeyle özel karanlık atmosferi istediğin zaman sadece kendin için açıp kapatabilirsin.</p>${b('realm',x.realm?'🌑 KARANLIK DÜNYAYI KAPAT':'👁️ KARANLIK DÜNYAYI AÇ')}</div><p class="ex-help">Kırmızı sis, karanlık gökyüzü, glitch çizgileri ve Forsaken silueti; mevcut global event sistemine zarar vermez.</p>`}
-if(page==='secret'){html=`<p class="ex-help">Secret Eventler sadece doğrulanmış admin tarafından başlatılır. Oyuncular yalnızca etkinliği görür. Global eventi başlatmak için Ü tuşuyla admin panelini aç.</p><div class="ex-grid"><div class="ex-card"><div class="emblem">🔐</div><b>Gizli Kızıl Alarm</b><small>3× pasif para, 2× XP; kırmızı karanlık efekt.</small><small>Global event #5</small>${b('secretAdmin','🔐 ADMİN PANELİNİ AÇ')}</div><div class="ex-card"><div class="emblem">👁️</div><b>Forsaken Uyanışı</b><small>Mevcut Forsaken global eventi (#4), Dead Ringer müziği.</small>${b('secretAdmin','🔐 ADMİN PANELİNİ AÇ')}</div></div>`}
-if(page==='rank'){html=`<p class="ex-help">${refStatus()} Oyuncu adın ve kazanç bilgilerinin sunucuya gönderilmesi için Katıl butonuna bas. Herkese açık sıralama deneme amaçlıdır; mevcut oyunda altın istemcide saklandığından rekabetçi doğrulama için sunucu-taraflı para sistemi gerekir.</p><div class="ex-row"><input id="exName" maxlength="20" placeholder="Oyuncu adı (ör. Noob123)" value="${escapeText(x.playerName)}">${b('join','🌐 KATIL / GÜNCELLE')}</div><div id="exRankResult"><p class="ex-help">Sıralama yükleniyor…</p></div>`;setTimeout(fetchRanks,0)}
+if(page==='rank'){html=`<p class="ex-help">${refStatus()} Oyuncu adını kaydettiğinde sıralama hemen güncellenir. Açık olan liderlik listesi düzenli olarak otomatik yenilenir. Herkese açık sıralama deneme amaçlıdır; mevcut oyunda altın istemcide saklandığından rekabetçi doğrulama için sunucu-taraflı para sistemi gerekir.</p><div class="ex-row"><input id="exName" maxlength="20" placeholder="Oyuncu adı (ör. Noob123)" value="${escapeText(x.playerName)}">${b('join','💾 İSMİ KAYDET / GÜNCELLE')}</div><div id="exRankResult"><p class="ex-help">Sıralama yükleniyor…</p></div>`;setTimeout(fetchRanks,0)}
 if(page==='trade'){html=`<p class="ex-help">Bu beta sistem tek yönlü pet gönderme teklifidir; karşılıklı güvenli takas henüz değildir. İki taraf onaylamadan tamamlanmaz; hesabının gizli cihaz anahtarı kullanılır. Sunucuya bağlanmıyorsa takas yapılamaz. Kalıcı gerçek ekonomi için veritabanı gerekir.</p><div class="ex-highlight">Oyuncu adın: <b>${escapeText(x.playerName)||'Henüz oluşturulmadı'}</b><p>Önce Liderlik bölümünden oyuncu adıyla kaydol.</p></div><div class="ex-row"><input id="exTradeTo" placeholder="Alıcı oyuncu adı" maxlength="20"><select id="exTradePet">${petNames.map((n,i)=>`<option value="${i+1}">${petEmojis[i]} ${n} (${x.pets.filter(p=>p===i+1).length})</option>`).join('')}</select>${b('tradeCreate','📨 TAKAS TEKLİFİ')}</div><div id="exTradeResult">Takas listesi yükleniyor…</div>`;setTimeout(fetchTrades,0)}
 content.innerHTML=html;notice.textContent='';}
 function escapeText(s){return String(s||'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
-function effectStatus(){let stage=document.getElementById('stage');stage.classList.toggle('ex-forsaken-world',!!x.realm||activeEvent===4||activeEvent===5);let pet=stage.querySelector('#exPet');if(!pet){pet=document.createElement('div');pet.className='ex-pet-float';pet.id='exPet';stage.appendChild(pet)}pet.innerHTML=x.pet>0&&x.pets.includes(x.pet)?petEmojis[x.pet-1]+'<span>'+escapeText(petNames[x.pet-1])+'</span>':'';pet.hidden=!(x.pet>0&&x.pets.includes(x.pet));}
+function effectStatus(){let stage=document.getElementById('stage');stage.classList.toggle('ex-forsaken-world',!!x.realm||activeEvent===4);let pet=stage.querySelector('#exPet');if(!pet){pet=document.createElement('div');pet.className='ex-pet-float';pet.id='exPet';stage.appendChild(pet)}pet.innerHTML=x.pet>0&&x.pets.includes(x.pet)?petEmojis[x.pet-1]+'<span>'+escapeText(petNames[x.pet-1])+'</span>':'';pet.hidden=!(x.pet>0&&x.pets.includes(x.pet));}
 function syncHud(){document.getElementById('incomeTop').textContent=money(Math.max(5,Math.floor(income()*cashBoost()*pBonus())));document.getElementById('income').textContent='+'+money(Math.max(5,Math.floor(income()*cashBoost()*pBonus())))+' 🪙/sn'}
 const originalTick=tick;
 tick=function(){if(!window.VENOM_AUTHORIZED)return;const before=state.cash,xpBefore=state.xp;originalTick();let added=Math.max(0,state.cash-before);const ratio=Math.max(1,cashBoost()*pBonus());state.cash+=Math.floor(added*(ratio-1));const xpAfter=state.xp; if(xpAfter>=xpBefore){const gained=xpAfter-xpBefore;state.xp+=Math.floor(gained*(xpBoost()-1))}syncHud();document.getElementById('cashTop').textContent=money(state.cash);document.getElementById('cash').textContent=money(state.cash)+' 🪙';save();effectStatus();};
@@ -851,7 +856,7 @@ const oldDisplay=display;display=function(){oldDisplay();syncHud();effectStatus(
 function identity(){if(!x.playerId)x.playerId='v_'+cryptoRandom(24);if(!x.playerToken)x.playerToken=cryptoRandom(64);clean();}
 function cryptoRandom(n){const a=new Uint8Array(n/2);if(window.crypto&&crypto.getRandomValues)crypto.getRandomValues(a);else for(let i=0;i<a.length;i++)a[i]=Math.floor(Math.random()*256);return Array.from(a,v=>v.toString(16).padStart(2,'0')).join('')}
 async function api(uri,method='GET',payload){const r=await fetch(uri,{method,headers:{'Content-Type':'application/json','X-Player-Token':x.playerToken||''},credentials:'same-origin',body:payload?JSON.stringify(payload):undefined,signal:AbortSignal.timeout(9000)});const v=await r.json();if(!r.ok||!v.ok)throw Error(v.error||'Bağlantı hatası '+r.status);return v}
-async function join(){const input=document.getElementById('exName');const name=(input?.value||'').trim();if(!/^[\p{L}\p{N}_ -]{3,20}$/u.test(name)){tell('Oyuncu adı 3–20 karakter olmalı.');return}identity();try{await api('/api/players','POST',{id:x.playerId,token:x.playerToken,name,level:state.level,cash:state.cash,rebirth:x.rebirth});x.playerName=name;clean();tell('✅ Global listeye eklendin.');await fetchRanks()}catch(e){tell(e.message+' • Web Service kullandığından emin ol.')}}
+async function join(){const input=document.getElementById('exName');const name=(input?.value||'').trim();if(!/^[\p{L}\p{N}_ -]{3,20}$/u.test(name)){tell('Oyuncu adı 3–20 karakter olmalı.');return}identity();try{await api('/api/players','POST',{id:x.playerId,token:x.playerToken,name,level:state.level,cash:state.cash,rebirth:x.rebirth});x.playerName=name;clean();tell('✅ İsmin global listeye kaydedildi; sıralama güncellendi.');await fetchRanks()}catch(e){tell(e.message+' • Web Service kullandığından emin ol.')}}
 async function fetchRanks(){const el=document.getElementById('exRankResult');if(!el)return;try{const r=await api('/api/leaderboard');el.innerHTML=r.players.map((p,i)=>`<div class="ex-rank"><b>${i+1}.</b><b>${escapeText(p.name)}</b><span>${money(p.cash)} 🪙</span><span>♻️ ${p.rebirth||0}</span></div>`).join('')||'<p>Henüz oyuncu yok.</p>'}catch(e){el.innerHTML='<p class="ex-help">🌐 Global liste için güncellenmiş Web Service gerekli: '+escapeText(e.message)+'</p>'}}
 async function fetchTrades(){const el=document.getElementById('exTradeResult');if(!el||!x.playerId)return;try{const r=await api('/api/trades?player='+encodeURIComponent(x.playerId));for(const sent of x.sentTrades){const t=r.trades.find(k=>k.id===sent.id);if(t&&t.status==='cancelled'&&!sent.restored){x.pets.push(sent.pet);sent.restored=true;clean()}}el.innerHTML=r.trades.map(t=>`<div class="ex-vault"><b>${escapeText(t.fromName)} → ${escapeText(t.toName)}</b><span>${petEmojis[t.pet-1]||'🐾'} ${escapeText(petNames[t.pet-1]||'Pet')} • ${t.status}</span>${t.status==='pending'&&t.to===x.playerId?b('tradeAccept:'+t.id,'✅ KABUL ET'):''}${t.status==='pending'&&t.from===x.playerId?b('tradeCancel:'+t.id,'İPTAL'):''}</div>`).join('')||'<p>Henüz takas teklifi yok.</p>'}catch(e){el.textContent='Takas servisi çalışmıyor: '+e.message}}
 async function tradeCreate(){const to=(document.getElementById('exTradeTo')?.value||'').trim();const pet=Number(document.getElementById('exTradePet')?.value);if(!x.playerName){tell('Önce Liderlik bölümünden oyuncu adıyla kaydol.');return}if(!x.pets.includes(pet)){tell('Bu pet sende yok.');return}try{const r=await api('/api/trades','POST',{action:'create',id:x.playerId,token:x.playerToken,toName:to,pet,ownedPets:x.pets});x.pets.splice(x.pets.indexOf(pet),1);if(x.pet===pet&&!x.pets.includes(pet))x.pet=0;x.sentTrades.push({id:r.trade.id,pet,restored:false});clean();effectStatus();tell('✅ Pet teklif için ayrıldı. Alıcı kabul ederse ona geçer; iptal edersen geri gelir.');await fetchTrades()}catch(e){tell(e.message)}}
@@ -863,22 +868,61 @@ if(act==='equipPet'){x.pet=+arg+1;clean();effectStatus();draw()}
 if(act==='evo'){let i=+arg;const lev=x.evo[i];const cost=Math.round(500*Math.pow(2.8,lev)*Math.pow(2,i));if(lev>=12||state.cash<cost)return;state.cash-=cost;x.evo[i]++;clean();save();display();draw();tell(evoNames[i]+' geliştirildi!')}
 if(act==='daily'){if(x.lastDaily===stamp())return;let day=(x.dailyDay||0)%7;state.cash+=dailyGold[day];x.dailyDay=day+1;x.lastDaily=stamp();clean();save();display();draw();tell('Günlük ödül: +'+money(dailyGold[day])+' 🪙')}
 if(act==='realm'){x.realm=!x.realm;clean();effectStatus();draw()}
-if(act==='secretAdmin'){close();openAdmin()}
+if(act==='afkBuy'){
+ const cost=7.5e20;
+ if(!x.afkOwned&&state.cash>=cost){state.cash-=cost;x.afkOwned=true;x.afkArmed=false;clean();save();display();draw();tell('✅ AFK izni alındı. Oyundan çıkmadan önce AFK’yi aç.');}
+ else if(!x.afkOwned)tell('750Qi paran henüz yok.');
+}
+if(act==='afkToggle'&&x.afkOwned){
+ x.afkArmed=!x.afkArmed;
+ x.afkStartedAt=0;
+ x.afkRate=0;
+ x.afkAccount=window.VENOM_GUEST_MODE?'guest':String(window.VENOM_USER_ID||'guest');
+ clean();draw();tell(x.afkArmed?'💤 AFK hazır! Şimdi siteden çıkabilirsin.':'AFK kapatıldı.');
+}
 if(act==='join')await join();if(act==='tradeCreate')await tradeCreate();if(act==='tradeAccept')await tradeAct(arg,'accept');if(act==='tradeCancel')await tradeAct(arg,'cancel');});
-// Add secret fifth event and make it accessible solely from admin event controls.
-if(Array.isArray(EVENTS)&&EVENTS.length===4){EVENTS.push({name:'🔐 Kızıl Alarm • Secret',desc:'Gizli admin etkinliği. 3× para ve 2× XP, şiddetsiz glitch atmosferi.',effect:'Para ×3 • XP ×2',track:'Dead Ringer — Secret Remix'});}
-const oldLocalSet=localSetEvent;
-localSetEvent=function(n){oldLocalSet(n);effectStatus();};
-// Allow remote event #5 (server permits 0..5).
-const oldApply=applyGlobalEvent;
-applyGlobalEvent=function(ev){if(ev&&Number(ev.num)===5){const was=activeEvent;activeEvent=5;oldApply({...ev,num:4});activeEvent=5;document.getElementById('stage').dataset.event='4';document.getElementById('eventBanner').textContent='🔐 KIZIL ALARM • 3× PARA • 2× XP';effectStatus();return;}oldApply(ev);effectStatus()};
-const oldTick=tick;
-tick=function(){if(activeEvent!==5){oldTick();return;}const before=state.cash;oldTick();state.cash+=Math.max(0,2*(state.cash-before));state.xp+=Math.max(1,Math.floor(state.level/14)+1);display();save()};
-const oldRenderEvents=renderEvents;
-renderEvents=function(){oldRenderEvents();const root=document.getElementById('eventGrid');if(root&&!root.querySelector('[data-secret-event="5"]')){let item=document.createElement('div');item.className='admin-event';item.dataset.secretEvent='5';item.innerHTML='<b>🔐 KIZIL ALARM</b><small>Secret Event • 3× para, 2× XP. Sadece admin başlatabilir.</small><button type="button" id="exStartSecret">🔐 HERKES İÇİN BAŞLAT</button>';root.appendChild(item);item.querySelector('button').onclick=()=>setEvent(5)}};
+// Only the four original events are available; no extra Secret Events.
+const originalLocalSet=localSetEvent;
+localSetEvent=function(n){originalLocalSet(n);effectStatus()};
+const originalGlobalApply=applyGlobalEvent;
+applyGlobalEvent=function(ev){originalGlobalApply(ev);effectStatus()};
 renderEvents();effectStatus();syncHud();
+// AFK: the game does not earn while closed unless the player explicitly bought
+// and armed AFK before leaving. Calculate the offline reward only on return.
+function afkAccount(){return window.VENOM_GUEST_MODE?'guest':String(window.VENOM_USER_ID||'guest')}
+function afkStart(){
+ if(!x.afkOwned||!x.afkArmed||!window.VENOM_AUTHORIZED||x.afkStartedAt)return;
+ x.afkAccount=afkAccount();
+ x.afkStartedAt=Date.now();
+ x.afkRate=Math.max(5,Math.floor(income()*cashBoost()*pBonus())); // excludes temporary global event multipliers
+ clean();save();
+}
+function afkCollect(){
+ if(!x.afkStartedAt||!window.VENOM_AUTHORIZED||afkAccount()!==x.afkAccount)return;
+ const seconds=Math.max(0,Math.floor((Date.now()-x.afkStartedAt)/1000));
+ const amount=Math.max(0,Math.floor(seconds*(Number(x.afkRate)||0)));
+ x.afkStartedAt=0;x.afkRate=0;x.afkArmed=false;
+ clean();
+ if(amount>0){state.cash+=amount;save();display();
+  const message='💤 AFK kazancı: +'+money(amount)+' 🪙 ('+Math.floor(seconds/60)+' dakika).';
+  const popup=document.createElement('div');popup.className='afk-toast';popup.textContent=message;
+  document.body.appendChild(popup);setTimeout(()=>popup.remove(),8000);
+ }
+}
+function afkForeground(){
+ if(window.VENOM_AUTHORIZED)afkCollect();
+ lastMoneyTick=Date.now();
+}
+window.addEventListener('pagehide',afkStart);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)afkStart();else afkForeground()});
+window.addEventListener('focus',afkForeground);
+// On initial load the account gate may still be visible: wait until the save is loaded.
+const afkBoot=setInterval(()=>{if(window.VENOM_AUTHORIZED){afkCollect();clearInterval(afkBoot)}},400);
+// Keep the visible global leaderboard fresh, including other players' recent registrations.
+setInterval(()=>{if(page==='rank'&&modal.classList.contains('ex-open'))fetchRanks()},5000);
+
 // Show server-backed progress when available. Rate-limited to prevent flooding.
-let lastSync=0;setInterval(()=>{if(!x.playerName||!x.playerId||Date.now()-lastSync<30000)return;lastSync=Date.now();api('/api/players','POST',{id:x.playerId,token:x.playerToken,name:x.playerName,level:state.level,cash:state.cash,rebirth:x.rebirth}).catch(()=>{})},32000);
+let lastSync=0;setInterval(()=>{if(!x.playerName||!x.playerId||Date.now()-lastSync<10000)return;lastSync=Date.now();api('/api/players','POST',{id:x.playerId,token:x.playerToken,name:x.playerName,level:state.level,cash:state.cash,rebirth:x.rebirth}).catch(()=>{})},11000);
 })();
 </script>
 </body></html>
