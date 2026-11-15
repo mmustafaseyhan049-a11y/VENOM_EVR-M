@@ -18,7 +18,65 @@
 .admin-window{max-width:760px}.music-dock{position:static;left:auto;bottom:auto;width:100%;z-index:auto;margin:16px 0 8px;box-shadow:none;padding:15px;background:#111c34;border:1px solid #7063c1}
 .music-head{flex-wrap:wrap}.music-head span{color:#cbb9ff}.music-dock select{width:100%;padding:11px;background:#182744;color:white;border:1px solid #8074c9;border-radius:10px;margin:9px 0 12px}.music-actions{display:flex;flex-wrap:wrap}.music-actions button,.music-actions a{flex:1 1 145px;cursor:pointer}.music-dock small{margin-top:12px}.music-dock .music-tip{margin:10px 0}.music-dock label{display:block;margin-top:9px}.music-dock.collapsed{width:100%}.music-import{padding:12px;border:1px dashed #9185ea;background:#162441;border-radius:12px;margin:12px 0}.music-import input{display:block;width:100%;padding:9px 0;color:#fff}.music-import #musicFileName{font-size:12px;color:#9ee8d0;margin-top:7px}.music-actions a{font-size:12px}
 @media(max-width:650px){.music-dock{width:100%;padding:12px}.music-actions{flex-direction:row}.music-actions button,.music-actions a{width:auto}}
+
+/* VENOM ACCOUNT GATE */
+#venomAuthGate{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;padding:22px;background:radial-gradient(ellipse at 52% 17%,#28205d 0,#080b17 72%);overflow:auto}
+#venomAuthGate[hidden]{display:none!important}
+.va-card{width:min(100%,460px);background:#121b31;border:1px solid #5264a1;border-radius:23px;box-shadow:0 25px 80px #0009;padding:26px;color:#f1f6ff}
+.va-brand{text-align:center;font-size:26px;font-weight:1000;letter-spacing:2px;margin-bottom:8px}.va-brand b{color:#a698ff}
+.va-sub{text-align:center;color:#bbc6e5;font-size:13px;line-height:1.6;margin-bottom:22px}
+.va-tabs{display:flex;gap:8px;margin-bottom:18px}.va-tabs button{flex:1;background:#1c2a47;border:1px solid #52618a;color:#cbd5f0;border-radius:11px;padding:11px;font-weight:800}
+.va-tabs button.active{background:#6953db;color:white}
+.va-pane[hidden]{display:none!important}
+#venomAuthGate label{display:block;font-weight:800;font-size:13px;color:#cbd8ef;margin:13px 0 7px}
+#venomAuthGate input{width:100%;border-radius:12px;border:1px solid #516184;background:#0b1326;padding:13px 14px;color:white;font:inherit}
+#venomAuthGate input:focus{outline:2px solid #8c79f7}
+.va-action{width:100%;margin-top:17px;padding:13px;border:0;border-radius:12px;background:linear-gradient(100deg,#6954e4,#399eb8);color:white;font-weight:900;cursor:pointer}
+.va-action:disabled{opacity:.6;cursor:wait}
+.va-secondary{border:1px solid #526184;background:#1c2b42}
+.va-msg{min-height:20px;font-size:13px;line-height:1.55;color:#ffdc9b;margin-top:14px}
+.va-small{font-size:12px;color:#9caecc;line-height:1.55;margin-top:13px}
+.va-step{padding:8px 10px;margin:10px 0;border:1px solid #46587c;background:#1d2b48;border-radius:10px;color:#b7eeec;font-size:12px}
+#vaAccountBar{display:none;position:fixed;right:15px;bottom:12px;z-index:900;border:1px solid #48557c;background:#111c30f2;border-radius:13px;padding:8px 12px;gap:10px;align-items:center;font-size:12px;color:#d7e7fc}
+#vaAccountBar button{background:#42388e;border:0;border-radius:9px;color:white;padding:8px;cursor:pointer;font-weight:800}
 </style></head><body>
+<section id="venomAuthGate" aria-label="Venom hesap girişi">
+ <div class="va-card">
+  <div class="va-brand">VENOM <b>EVRİM</b></div>
+  <div class="va-sub">Hesabına giriş yap veya Gmail adresinle kayıt ol.<br/>E-posta doğrulanmadan oyun açılmaz.</div>
+  <div id="vaSetup" class="va-pane" hidden><div class="va-step">🔧 Hesap sistemi henüz bağlanmadı</div><p class="va-small">Gerçek doğrulama e-postaları ve şifre denetimi için site sahibinin Supabase bağlantısını kurması gerekiyor. Alttaki kurulum yönergelerine bak.</p></div>
+  <div id="vaForms">
+   <div class="va-tabs"><button type="button" id="vaTabLogin" class="active">GİRİŞ YAP</button><button type="button" id="vaTabRegister">KAYIT OL</button></div>
+   <form id="vaLoginForm" class="va-pane">
+    <label for="vaLoginEmail">Gmail adresin</label><input id="vaLoginEmail" type="email" inputmode="email" autocomplete="username" placeholder="ornek@gmail.com" required>
+    <label for="vaLoginPass">Şifren</label><input id="vaLoginPass" type="password" autocomplete="current-password" required minlength="8" placeholder="Şifreni gir">
+    <button class="va-action" type="submit">OYUNA GİR</button>
+   </form>
+   <form id="vaRegisterForm" class="va-pane" hidden>
+    <div class="va-step">1 / 3 · E-postana kod gönder</div>
+    <label for="vaRegisterEmail">Gmail adresin</label><input id="vaRegisterEmail" type="email" autocomplete="email" required placeholder="ornek@gmail.com">
+    <button class="va-action" type="submit">DOĞRULAMA KODU GÖNDER</button>
+   </form>
+   <form id="vaCodeForm" class="va-pane" hidden>
+    <div class="va-step">2 / 3 · Gelen doğrulama kodunu gir</div>
+    <p class="va-small" id="vaSentEmail"></p>
+    <label for="vaCode">E-postana gelen kod</label><input id="vaCode" type="text" inputmode="numeric" autocomplete="one-time-code" required maxlength="12" pattern="[0-9]{6,12}" placeholder="Doğrulama kodu">
+    <button class="va-action" type="submit">KODU DOĞRULA</button>
+    <button class="va-action va-secondary" type="button" id="vaBackRegister">Geri dön</button>
+   </form>
+   <form id="vaSetPasswordForm" class="va-pane" hidden>
+    <div class="va-step">3 / 3 · Şifreni oluştur</div>
+    <label for="vaNewPass">Yeni şifre (en az 8 karakter)</label><input id="vaNewPass" type="password" autocomplete="new-password" minlength="8" required>
+    <label for="vaNewPassConfirm">Şifreyi tekrar gir</label><input id="vaNewPassConfirm" type="password" autocomplete="new-password" minlength="8" required>
+    <button class="va-action" type="submit">KAYDI TAMAMLA</button>
+   </form>
+   <p id="vaMsg" class="va-msg" role="status" aria-live="polite"></p>
+   <p class="va-small">Bu, Google ile OAuth girişi değil; doğrulanmış Gmail adresi ve şifreyle çalışan hesap sistemidir. Doğrulama kodunu kimseyle paylaşma.</p>
+  </div>
+ </div>
+</section>
+<div id="vaAccountBar"><span id="vaAccountEmail"></span><button type="button" id="vaLogout">ÇIKIŞ YAP</button></div>
+
 <header class="top"><div class="logo">VENOM <span>EVRİM</span></div><div class="topright"><div class="pill">🪙 <strong id="cashTop">0</strong></div><div class="pill">⭐ Seviye <strong id="levelTop">1</strong></div><div class="pill">⏱️ <strong id="incomeTop">0</strong> / sn</div><button class="pill top-market" id="skinTop">🎭 SKIN MARKET</button><button class="pill top-market" id="auraTop">✨ AURA MARKET</button></div></header>
 <main class="layout"><section class="panel"><p class="smalltitle">HESABIN</p><div class="sub">Toplam paran</div><div class="bigmoney" id="cash">0 🪙</div><div class="statline"><span>SEVİYE</span><b id="level">1</b></div><div class="bar"><div id="xpBar"></div></div><p class="sub" id="xpText">0 / 20 XP</p><div class="income"><div class="smalltitle">OTOMATİK KAZANÇ</div><b id="income">+1 🪙/sn</b><div class="sub">Normal Venom bile her saniye en az +5 altın kazanır. Hiçbir şey yapmana gerek yok.</div></div><p class="tip">Her saniye XP de kazanırsın. Seviye yükseldikçe yeni seviyeye ulaşmak zorlaşır, ancak seviye atlama ödülün büyür.<br><br>Skinler para kazancını artırır. Auralar yalnızca görünüş içindir.</p></section>
 <section class="stage" id="stage"><h1>VENOM</h1><div class="caption">Sürekli sana bakan karakterin • Saldırı yok</div><div class="spot"></div><canvas id="eventCanvas" class="event-canvas" aria-hidden="true"></canvas><div class="event-banner" id="eventBanner"></div><div class="avatar-wrap"><div class="aura-zone aura-off no-aura" id="auraZone"><div class="aura-ring"></div><canvas class="aura-sparks" id="auraCanvas"></canvas></div>
@@ -204,11 +262,12 @@ const KEY='symbiote_aura_tycoon_v4';let previous={};try{previous=JSON.parse(loca
 let state={cash:Number(previous.cash)||0,level:Math.max(1,Number(previous.level)||1),xp:Number(previous.xp)||0,skin:Number.isInteger(previous.skin)?previous.skin:0,aura:Number.isInteger(previous.aura)?previous.aura:0,ownedSkins:Array.isArray(previous.ownedSkins)?previous.ownedSkins:[0],ownedAuras:Array.isArray(previous.ownedAuras)?previous.ownedAuras:[0]};
 state.ownedSkins=Array.from(new Set([0,...state.ownedSkins.filter(i=>Number.isInteger(i)&&i>=0&&i<50)]));state.ownedAuras=Array.from(new Set([0,...state.ownedAuras.filter(i=>Number.isInteger(i)&&i>=0&&i<24)]));if(!state.ownedSkins.includes(state.skin))state.skin=0;if(!state.ownedAuras.includes(state.aura))state.aura=0;
 const $=id=>document.getElementById(id);let tab='skin';const fmt=n=>Number(n).toLocaleString('tr-TR',{maximumFractionDigits:0,notation:Number(n)>=1e18?'scientific':'standard'});const needXP=level=>Math.floor(24*Math.pow(level,1.53));const income=()=>Math.max(5,Math.floor((5+Math.pow(state.level,1.23)*.65)*(1+SKINS[state.skin].bonus/100)));const reward=l=>Math.floor(22*l*Math.pow(l,0.75));
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+function save(){if(!window.VENOM_AUTHORIZED || !window.VENOM_USER_ID)return;try{localStorage.setItem('venom_user_'+window.VENOM_USER_ID,JSON.stringify(state))}catch(e){}}
 function display(){const rate=income();$('cashTop').textContent=fmt(state.cash);$('cash').textContent=fmt(state.cash)+' 🪙';$('levelTop').textContent=state.level;$('level').textContent=state.level;$('income').textContent='+'+fmt(rate)+' 🪙/sn';$('incomeTop').textContent=fmt(rate);$('xpText').textContent=fmt(state.xp)+' / '+fmt(needXP(state.level))+' XP';$('xpBar').style.width=Math.min(100,state.xp/needXP(state.level)*100)+'%';$('avatarName').textContent=SKINS[state.skin].name.toLocaleUpperCase('tr-TR');const appearance=skinArt(state.skin);$('skinBack').innerHTML=appearance.back;$('skinFront').innerHTML=appearance.front;$('skinSummary').innerHTML='<b>'+SKINS[state.skin].name+'</b><p>Para bonusu: +%'+SKINS[state.skin].bonus+'</p>';$('auraSummary').innerHTML='<b>'+AURAS[state.aura].name+'</b><p>Sadece görsel efekt • Kazanç bonusu yok</p>';document.documentElement.style.setProperty('--skin',SKINS[state.skin].body);document.documentElement.style.setProperty('--shine',SKINS[state.skin].shine);document.documentElement.style.setProperty('--aura',AURAS[state.aura].color);$('auraZone').className='aura-zone '+(state.aura===0?'aura-off no-aura':'aura-on');}
 function floatMoney(amount){const e=document.createElement('span');e.className='float-money';e.textContent='+'+fmt(amount)+' 🪙';e.style.left=(43+Math.random()*14)+'%';$('stage').appendChild(e);setTimeout(()=>e.remove(),1000)}
 // Para, XP ve seviye hesaplaması görsel animasyondan bağımsızdır.
 function tick(){
+ if(!window.VENOM_AUTHORIZED)return;
  const ev=activeEvent;
  let gain=income()*(ev===2?2:ev===3?3:1);
  eventTickIndex++;
@@ -430,4 +489,113 @@ for(let i=0;i<100;i++)particles.push(particle());
 function frame(time){ctx.clearRect(0,0,cw,ch);const a=state.aura;if(a){const c=AURAS[a].color,t=time*.001,cx=cw/2,cy=ch*.47;ctx.save();ctx.globalCompositeOperation='screen';for(let i=0;i<65;i++){const p=particles[i],k=p.t+t*p.speed*(i%2?1:-1),ang=k+(a%3===0?Math.sin(t*2+i)*.3:0),r=p.r*(a===20?.53:1),x=cx+Math.cos(ang)*r*(a===17?1.25:1),y=cy+Math.sin(ang)*r*.99;let s=p.size*(a===6||a===17?1.1:.7);let yy=y;if([2,3,5,14,16].includes(a)) yy=cy+((y-cy)-((t*25+i*33)%300)+300)%300-150;if(a===18)yy=y+Math.sin(t+i)*22;ctx.globalAlpha=.25+.5*(.5+.5*Math.sin(p.phase+t*(1+a%4)));ctx.fillStyle=(a===8||a===22)?`hsl(${(i*29+t*46)%360} 100% 68%)`:c;ctx.shadowColor=ctx.fillStyle;ctx.shadowBlur=(a===4||a===16?19:12);ctx.beginPath();if([6,11,17,21,22].includes(a)){const pts=a===6?4:5;for(let j=0;j<pts*2;j++){let rr=j%2?s*.5:s*1.5,an=j*Math.PI/pts-Math.PI/2;let xx=x+Math.cos(an)*rr,py=yy+Math.sin(an)*rr;if(j===0)ctx.moveTo(xx,py);else ctx.lineTo(xx,py)}ctx.closePath()}else if([3,9,15,19].includes(a)){ctx.rect(x-s/2,yy-s/2,s,s*2)}else{ctx.arc(x,yy,s,0,Math.PI*2)}ctx.fill()}if([4,7,10,12,16,19,20,22].includes(a)){ctx.globalAlpha=.35;ctx.strokeStyle=c;ctx.lineWidth=a===16?3:1.5;ctx.shadowBlur=19;for(let k=0;k<3;k++){ctx.beginPath();for(let j=0;j<7;j++){const an=j*Math.PI/3+t*.7+k*2,x=cx+Math.cos(an)*(100+12*Math.sin(t*2+k+j)),y=cy+Math.sin(an)*150;if(j===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke()}}ctx.restore()}requestAnimationFrame(frame)}requestAnimationFrame(frame);
 // Catch up for elapsed time only while this page is running; each timer tick means one second.
 display();let lastMoneyTick=Date.now();setInterval(()=>{const now=Date.now();let elapsed=Math.min(20,Math.floor((now-lastMoneyTick)/1000));if(elapsed<1)return;lastMoneyTick+=elapsed*1000;for(let n=0;n<elapsed;n++)tick()},250);document.addEventListener('visibilitychange',()=>{if(document.hidden)save()});window.addEventListener('beforeunload',save);
-</script></body></html>
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+/*
+  VENOM EVRIM - GERCEK HESAP SISTEMI
+  1) https://supabase.com/dashboard -> New project
+  2) Project Settings > API: Project URL + publishable / anon key values below
+     Do NOT enter the service_role secret key in HTML.
+  3) Authentication > Providers > Email: enable email logins
+  4) Authentication > Email Templates > Magic Link: send code, not a link:
+     <h2>VENOM EVRIM kodun</h2><p>{{ .Token }}</p>
+  5) Save as index.html and redeploy to Render.
+  Note: local gameplay saves are per-user but per-browser; cloud save and cheat protection
+  require database tables, RLS and server side validation.
+*/
+const VENOM_SUPABASE_URL = 'SUPABASE_PROJECT_URL_BURAYA';
+const VENOM_SUPABASE_PUBLISHABLE_KEY = 'SUPABASE_PUBLISHABLE_KEY_BURAYA';
+(() => {
+'use strict';
+const el=id=>document.getElementById(id);
+const formNames=['vaLoginForm','vaRegisterForm','vaCodeForm','vaSetPasswordForm'];
+let db=null, targetEmail='', waiting=false;
+function msg(t){el('vaMsg').textContent=t||''}
+function gmail(s){return /^[^\s@]+@(gmail\.com|googlemail\.com)$/i.test(s.trim())}
+function showForm(id){formNames.forEach(n=>{el(n).hidden=n!==id});el('vaTabLogin').classList.toggle('active',id==='vaLoginForm');el('vaTabRegister').classList.toggle('active',id!=='vaLoginForm');msg('')}
+function busy(form,val){const b=form.querySelector('button[type="submit"]');if(b)b.disabled=val}
+function fail(err){msg(err?.message||String(err)||'Bir hata oluştu. Tekrar deneyin.')}
+function freshProfile(user){
+ window.VENOM_USER_ID=user.id;
+ const key='venom_user_'+user.id;
+ let v={};try{v=JSON.parse(localStorage.getItem(key)||'{}')||{}}catch(e){}
+ state.cash=Number.isFinite(Number(v.cash))?Math.max(0,Number(v.cash)):0;
+ state.level=Math.max(1,Math.floor(Number(v.level)||1));
+ state.xp=Math.max(0,Number(v.xp)||0);
+ state.ownedSkins=Array.isArray(v.ownedSkins)?[...new Set([0,...v.ownedSkins.filter(n=>Number.isInteger(n)&&n>=0&&n<50)])]:[0];
+ state.ownedAuras=Array.isArray(v.ownedAuras)?[...new Set([0,...v.ownedAuras.filter(n=>Number.isInteger(n)&&n>=0&&n<23)])]:[0];
+ state.skin=state.ownedSkins.includes(v.skin)?v.skin:0;
+ state.aura=state.ownedAuras.includes(v.aura)?v.aura:0;
+ window.VENOM_AUTHORIZED=true;
+ el('venomAuthGate').hidden=true;
+ el('vaAccountBar').style.display='flex';
+ el('vaAccountEmail').textContent=user.email||'Oyuncu';
+ // Avoid granting XP for time spent logging in.
+ display();
+}
+function lockGame(){
+ window.VENOM_AUTHORIZED=false;window.VENOM_USER_ID=null;
+ el('vaAccountBar').style.display='none';el('venomAuthGate').hidden=false;
+ showForm('vaLoginForm');
+}
+el('vaTabLogin').onclick=()=>showForm('vaLoginForm');
+el('vaTabRegister').onclick=()=>showForm('vaRegisterForm');
+el('vaBackRegister').onclick=()=>showForm('vaRegisterForm');
+const configured=VENOM_SUPABASE_URL.startsWith('https://')&&VENOM_SUPABASE_PUBLISHABLE_KEY.length>30;
+if(!configured || !window.supabase?.createClient){
+ el('vaSetup').hidden=false;el('vaForms').hidden=true;
+ if(configured)el('vaSetup').querySelector('p').textContent='Supabase kütüphanesi yüklenemedi. İnternet bağlantısını kontrol et.';
+ return;
+}
+db=window.supabase.createClient(VENOM_SUPABASE_URL,VENOM_SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
+el('vaRegisterForm').addEventListener('submit',async(e)=>{
+ e.preventDefault();let f=e.currentTarget, email=el('vaRegisterEmail').value.trim().toLowerCase();
+ if(!gmail(email)){msg('Lütfen geçerli bir Gmail adresi gir.');return}
+ busy(f,true);
+ try{
+  const {error}=await db.auth.signInWithOtp({email,options:{shouldCreateUser:true}});
+  if(error)throw error;
+  targetEmail=email;el('vaSentEmail').textContent=email+' adresine gönderilen kodu gir.';
+  showForm('vaCodeForm');msg('Kod gönderildi. Gelen kutusunu ve spam klasörünü kontrol et.');
+ }catch(err){fail(err)}finally{busy(f,false)}
+});
+el('vaCodeForm').addEventListener('submit',async(e)=>{
+ e.preventDefault();const f=e.currentTarget,token=el('vaCode').value.trim();
+ busy(f,true);
+ try{
+  const {data,error}=await db.auth.verifyOtp({email:targetEmail,token,type:'email'});
+  if(error)throw error;
+  if(!data?.session)throw new Error('Doğrulama oturumu alınamadı.');
+  showForm('vaSetPasswordForm');msg('E-posta doğrulandı. Şimdi şifreni oluştur.');
+ }catch(err){fail(err)}finally{busy(f,false)}
+});
+el('vaSetPasswordForm').addEventListener('submit',async(e)=>{
+ e.preventDefault();const f=e.currentTarget,p=el('vaNewPass').value;
+ if(p.length<8){msg('Şifre en az 8 karakter olmalı.');return}
+ if(p!==el('vaNewPassConfirm').value){msg('Şifreler eşleşmiyor.');return}
+ busy(f,true);
+ try{
+  const {error}=await db.auth.updateUser({password:p});if(error)throw error;
+  await db.auth.signOut();
+  el('vaLoginEmail').value=targetEmail;el('vaLoginPass').value='';
+  showForm('vaLoginForm');msg('Kayıt tamamlandı. Gmail adresin ve şifrenle giriş yap.');
+ }catch(err){fail(err)}finally{busy(f,false)}
+});
+el('vaLoginForm').addEventListener('submit',async(e)=>{
+ e.preventDefault();const f=e.currentTarget,email=el('vaLoginEmail').value.trim().toLowerCase(),password=el('vaLoginPass').value;
+ if(!gmail(email)){msg('Geçerli bir Gmail adresi gir.');return}
+ busy(f,true);
+ try{
+  const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;
+  if(!data?.user || !data?.session || !data.user.email_confirmed_at){await db.auth.signOut();throw new Error('E-posta doğrulanmadı.')}
+  el('vaLoginPass').value='';freshProfile(data.user);
+ }catch(err){msg('Giriş yapılamadı. E-posta veya şifren yanlış olabilir. '+(err?.message||''))}finally{busy(f,false)}
+});
+el('vaLogout').addEventListener('click',async()=>{
+ save();try{await db.auth.signOut()}catch(e){};
+ lockGame();
+});
+})();
+</script>
+</body></html>
